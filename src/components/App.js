@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import UserContext from '../context/UserContext';
-import '../assets/reset.css';
 import Home from './layouts/Home';
 import Navbar from './layouts/Navbar';
 import SignIn from './layouts/SignIn';

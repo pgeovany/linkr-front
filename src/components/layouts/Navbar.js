@@ -51,7 +51,7 @@ export default function Navbar() {
 const Main = styled.div`
   height: 72px;
   width: 100%;
-  /* padding: 0 20px 0 20px; */
+  padding: 0 20px 0 20px;
   background-color: #151515;
   position: fixed;
   top: 0;
@@ -64,22 +64,20 @@ const Main = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    padding-right: 20px;
   }
 `;
 
 const Logo = styled.div`
   font-size: 50px;
   color: white;
-  padding-left: 20px;
 `;
 
 const UpArrow = styled(BsChevronUp)`
   color: white;
-  font-size: 30px;
+  font-size: 36px;
   padding-right: 10px;
   position: absolute;
-  right: 70px;
+  right: 50px;
 
   &&:hover {
     cursor: pointer;
@@ -88,7 +86,7 @@ const UpArrow = styled(BsChevronUp)`
 
 const DownArrow = styled(BsChevronDown)`
   color: white;
-  font-size: 30px;
+  font-size: 36px;
   padding-right: 10px;
 
   &&:hover {
