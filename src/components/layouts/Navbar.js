@@ -1,13 +1,15 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import styled from 'styled-components';
 import ProfilePicture from '../shared/ProfilePicture';
 import { deleteLocal } from '../../utils/localStorageFunctions';
+import UserContext from '../../context/UserContext';
 
 export default function Navbar() {
   const location = useLocation().pathname;
   const navigate = useNavigate();
+  const { image } = useContext(UserContext);
 
   const render =
     location !== '/signin' && location !== '/signup' ? true : false;
@@ -35,10 +37,11 @@ export default function Navbar() {
             ) : (
               <DownArrow />
             )}
-            <ProfilePicture
-              src="https://rollingstone.uol.com.br/media/uploads/killbill.jpg"
-              alt="user"
-            />
+            {image !== null ? (
+              <ProfilePicture src={image} alt="profile" />
+            ) : (
+              <ProfilePicture src="" alt="profile" />
+            )}
           </div>
         </Main>
       );
@@ -68,6 +71,8 @@ const Main = styled.div`
 `;
 
 const Logo = styled.div`
+  font-family: 'Passion One';
+  font-weight: bold;
   font-size: 50px;
   color: white;
 `;
