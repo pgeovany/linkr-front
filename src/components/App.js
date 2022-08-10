@@ -7,9 +7,13 @@ import SignIn from './layouts/SignIn';
 import SignUp from './layouts/SignUp';
 
 export default function App() {
+  const [username, setUsername] = useState(null);
+  const [image, setImage] = useState(null);
+  const [token, setToken] = useState(null);
+
   return (
     <BrowserRouter>
-      <UserContext.Provider>
+      <UserContext.Provider value={{username, setUsername, image, setImage, token, setToken}}>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
