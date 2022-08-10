@@ -5,6 +5,10 @@ const ProfilePicture = styled.img`
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+
+  &&:hover {
+    cursor: pointer;
+  }
 `;
 
 export default ProfilePicture;
