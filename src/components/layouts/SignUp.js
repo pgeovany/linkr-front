@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import '../../assets/fonts.css';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
