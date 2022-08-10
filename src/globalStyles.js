@@ -46,4 +46,9 @@ export default createGlobalStyle`
     border-spacing: 0;
   }
 //-------RESET-----------------------//
+
+  * {
+    box-sizing: border-box;
+  }
+  
 `;
