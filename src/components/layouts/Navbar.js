@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import styled from 'styled-components';
@@ -7,48 +7,38 @@ import { deleteLocal } from '../../utils/localStorageFunctions';
 import UserContext from '../../context/UserContext';
 
 export default function Navbar() {
-  const location = useLocation().pathname;
   const navigate = useNavigate();
-  const { image } = useContext(UserContext);
-
-  const render =
-    location !== '/signin' && location !== '/signup' ? true : false;
   const [activeMenu, setActiveMenu] = useState(false);
+  const { image } = useContext(UserContext);
 
   function logout() {
     if (!window.confirm('Você realmente deseja sair do aplicativo?')) return;
     deleteLocal('user');
-    navigate('/signin');
+    navigate('/');
   }
 
-  function genNavbar() {
-    if (render) {
-      return (
-        <Main>
-          <Logo>linkr</Logo>
-          <div onClick={() => setActiveMenu(!activeMenu)}>
-            {activeMenu ? (
-              <>
-                <UpArrow />
-                <DropDownMenu onClick={() => logout()}>
-                  <h1>Logout</h1>
-                </DropDownMenu>
-              </>
-            ) : (
-              <DownArrow />
-            )}
-            {image !== null ? (
-              <ProfilePicture src={image} alt="profile" />
-            ) : (
-              <ProfilePicture src="" alt="profile" />
-            )}
-          </div>
-        </Main>
-      );
-    }
-    return null;
-  }
-  return <>{genNavbar()}</>;
+  return (
+    <Main>
+      <Logo>linkr</Logo>
+      <div onClick={() => setActiveMenu(!activeMenu)}>
+        {activeMenu ? (
+          <>
+            <UpArrow />
+            <DropDownMenu onClick={() => logout()}>
+              <h1>Logout</h1>
+            </DropDownMenu>
+          </>
+        ) : (
+          <DownArrow />
+        )}
+        {image !== null ? (
+          <ProfilePicture src={image} alt="profile" />
+        ) : (
+          <ProfilePicture src="" alt="profile" />
+        )}
+      </div>
+    </Main>
+  );
 }
 
 const Main = styled.div`

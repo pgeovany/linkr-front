@@ -31,7 +31,7 @@ export default function SignUp() {
       const promise = axios.post(URL, dadosCadastrados);
       promise
         .then((_) => {
-          navigate('/signin');
+          navigate('/');
         })
         .catch((err) => {
           alert(err.response.data);
@@ -80,7 +80,7 @@ export default function SignUp() {
             <button type="submit">Sign Up</button>
           </Formulario>
           <Link
-            to="/signin"
+            to="/"
             style={{
               textDecoration: '#ffffff',
               color: 'white',
@@ -102,7 +102,7 @@ export default function SignUp() {
             <ThreeDots color="white" width="120" height={45} radius="9" />
           </Formulario>
           <Link
-            to="/signin"
+            to="/"
             style={{
               textDecoration: '#ffffff',
               color: 'white',
