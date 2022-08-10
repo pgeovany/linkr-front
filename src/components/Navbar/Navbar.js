@@ -8,7 +8,12 @@ export default function Navbar() {
   const location = useLocation().pathname;
   const render =
     location !== '/signin' && location !== '/signup' ? true : false;
-  const [activeMenu, setActiveMenu] = useState(false);
+  const [activeMenu, setActiveMenu] = useState(true);
+
+  function logout() {
+    alert('To-do');
+    return;
+  }
 
   function genNavbar() {
     if (render) {
@@ -16,7 +21,14 @@ export default function Navbar() {
         <Main>
           <Logo>linkr</Logo>
           <div>
-            {activeMenu ? <DownArrow /> : <UpArrow />}
+            {activeMenu ? (
+              <>
+                <UpArrow onClick={() => setActiveMenu(!activeMenu)} />
+                <DropDownMenu onClick={() => logout()}>Logout</DropDownMenu>
+              </>
+            ) : (
+              <DownArrow onClick={() => setActiveMenu(!activeMenu)} />
+            )}
             <ProfilePicture
               src="https://rollingstone.uol.com.br/media/uploads/killbill.jpg"
               alt="user"
@@ -45,6 +57,7 @@ const Main = styled.div`
   div {
     display: flex;
     align-items: center;
+    position: relative;
   }
 `;
 
@@ -76,5 +89,5 @@ const DownArrow = styled(BsChevronDown)`
 const DropDownMenu = styled.div`
   height: 30px;
   width: 60px;
-  background-color: purple;
+  background-color: white;
 `;
