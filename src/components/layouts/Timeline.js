@@ -12,4 +12,6 @@ export default function Timeline() {
 
 const TimelineContainer = styled.div`
   margin-top: 72px;
+  width: 100%;
+  background-color: #333333;
 `;

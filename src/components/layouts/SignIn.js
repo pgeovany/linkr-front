@@ -15,7 +15,7 @@ export default function Signin() {
     const temToken = localStorage.getItem('linkrUserdata');
     const dadosUsuario = JSON.parse(temToken);
 
-    const { setUser, setToken } = useContext(UserContext);
+    const { setUsername, setToken, setImage } = useContext(UserContext);
 
     function Autologin(){
         if(temToken){
@@ -37,16 +37,17 @@ export default function Signin() {
             alert("Preencha todos os campos")
         }
 
-        const promise = axios.post("http://localhost:4000/login", data)
+        const promise = axios.post("http://localhost:5000/login", data)
         promise.then(res => {
             console.log(res.data)
-            const { nome, token } = res.data
+            const { nome, token, foto } = res.data
             localStorage.setItem('linkrUserdata', JSON.stringify({
                 token: res.data.token,
                 nome: res.data.nome
             }));
-            setUser(nome)
+            setUsername(nome)
             setToken(token)
+            setImage(foto)
             setLoadingButton(false);
             navigate("/timeline")
         });
