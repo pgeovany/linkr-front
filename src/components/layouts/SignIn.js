@@ -15,7 +15,7 @@ export default function Signin() {
     const temToken = localStorage.getItem('linkrUserdata');
     const dadosUsuario = JSON.parse(temToken);
 
-    const { setUser, setToken } = useContext(UserContext);
+    const { setUsername, setToken } = useContext(UserContext);
 
     function Autologin(){
         if(temToken){
@@ -42,10 +42,10 @@ export default function Signin() {
             console.log(res.data)
             const { nome, token } = res.data
             localStorage.setItem('linkrUserdata', JSON.stringify({
-                token: res.data.token,
-                nome: res.data.nome
+                token: nome,
+                nome: token
             }));
-            setUser(nome)
+            setUsername(nome)
             setToken(token)
             setLoadingButton(false);
             navigate("/timeline")
@@ -53,8 +53,8 @@ export default function Signin() {
         promise.catch(err => {
             if(err.response.status === 401){
                 alert("Usuário ou senha inválidos")
-                setLoadingButton(false);
             }
+            setLoadingButton(false);
             console.log(err)
             
         })
