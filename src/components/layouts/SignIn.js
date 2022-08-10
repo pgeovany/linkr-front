@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect, useContext } from "react"
 import styled from "styled-components"
 import axios from "axios"
-import { TailSpin } from  'react-loader-spinner';
 
 import UserContext from '../../context/UserContext';
 import'../../assets/fonts.css'
