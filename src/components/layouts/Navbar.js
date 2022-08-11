@@ -1,15 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import styled from 'styled-components';
 import ProfilePicture from '../shared/ProfilePicture';
 import { deleteLocal } from '../../utils/localStorageFunctions';
-import UserContext from '../../context/UserContext';
 
-export default function Navbar() {
+export default function Navbar({ image, activeMenu, setActiveMenu }) {
   const navigate = useNavigate();
-  const [activeMenu, setActiveMenu] = useState(false);
-  const { image } = useContext(UserContext);
 
   function logout() {
     if (!window.confirm('Você realmente deseja sair do aplicativo?')) return;
@@ -18,7 +14,13 @@ export default function Navbar() {
   }
 
   return (
-    <Main>
+    <Main
+      onClick={() => {
+        if (activeMenu) {
+          setActiveMenu(false);
+        }
+      }}
+    >
       <Logo>linkr</Logo>
       <div onClick={() => setActiveMenu(!activeMenu)}>
         {activeMenu ? (
