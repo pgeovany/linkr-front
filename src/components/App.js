@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import UserContext from '../context/UserContext';
-import Timeline from './layouts/Timeline';
+import Timeline from './layouts/Timeline/Timeline';
 import SignIn from './layouts/SignIn';
 import SignUp from './layouts/SignUp';
 
