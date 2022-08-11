@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { ThreeDots } from 'react-loader-spinner';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import '../../assets/fonts.css';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userName, setUserName] = useState('');
+  const [username, setUsername] = useState('');
   const [pictureUrl, setPictureUrl] = useState('');
   const [abilitado, setAbilitado] = useState(true);
 
@@ -21,20 +22,20 @@ export default function SignUp() {
     const dadosCadastrados = {
       email,
       password,
-      userName,
+      username,
       pictureUrl,
     };
     console.log(dadosCadastrados);
 
-    if ((email || password || userName || pictureUrl) !== null) {
-      const URL = 'localhost:5000/signup';
+    if ((email || password || username || pictureUrl) !== null) {
+      const URL = 'http://localhost:5000/logup';
       const promise = axios.post(URL, dadosCadastrados);
       promise
         .then((_) => {
           navigate('/');
         })
-        .catch((err) => {
-          alert(err.response.data);
+        .catch((_) => {
+          Notify.failure('Esse email já está em uso');
           setAbilitado(true);
         });
     }
@@ -66,8 +67,8 @@ export default function SignUp() {
             <input
               placeholder="username"
               type="text"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
             <input
@@ -86,7 +87,6 @@ export default function SignUp() {
               color: 'white',
               fontSize: '20px',
               fontWeight: '800',
-              marginTop: '80px',
             }}
           >
             <span>Switch back to log in</span>
@@ -96,9 +96,9 @@ export default function SignUp() {
         <DivFormulario>
           <Formulario onSubmit={cadastrarUsuario}>
             <input type="email" placeholder="email" disabled />
-            <input type="text" placeholder="password" disabled />
+            <input type="password" placeholder="password" disabled />
             <input type="text" placeholder="username" disabled />
-            <input type="password" placeholder="picture url" disabled />
+            <input type="text" placeholder="picture url" disabled />
             <ThreeDots color="white" width="120" height={45} radius="9" />
           </Formulario>
           <Link
@@ -117,6 +117,45 @@ export default function SignUp() {
     </Conteudo>
   );
 }
+
+Notify.init({
+  width: '280px',
+  position: 'right-top',
+  distance: '10px',
+  opacity: 1,
+  borderRadius: '5px',
+  rtl: false,
+  timeout: 2000,
+  messageMaxLength: 110,
+  backOverlay: false,
+  backOverlayColor: 'rgba(0,0,0,0.5)',
+  plainText: true,
+  showOnlyTheLastOne: false,
+  clickToClose: false,
+  pauseOnHover: true,
+  ID: 'NotiflixNotify',
+  className: 'notiflix-notify',
+  zindex: 4001,
+  fontFamily: 'Quicksand',
+  fontSize: '13px',
+  cssAnimation: true,
+  cssAnimationDuration: 400,
+  cssAnimationStyle: 'fade',
+  closeButton: false,
+  useIcon: true,
+  useFontAwesome: false,
+  fontAwesomeIconStyle: 'basic',
+  fontAwesomeIconSize: '34px',
+  failure: {
+    background: '#ff5549',
+    textColor: '#fff',
+    childClassName: 'notiflix-notify-failure',
+    notiflixIconColor: 'rgba(0,0,0,0.2)',
+    fontAwesomeClassName: 'fas fa-times-circle',
+    fontAwesomeIconColor: 'rgba(0,0,0,0.2)',
+    backOverlayColor: 'rgba(255,85,73,0.2)',
+  },
+});
 
 const Conteudo = styled.div`
   display: flex;
@@ -164,10 +203,9 @@ const DivFormulario = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: black;
   width: 40%;
   height: 100vh;
-  padding: 0 60px;
+  padding: 0 80px;
   box-sizing: border-box;
   background-color: #333333;
   position: relative;
@@ -180,6 +218,9 @@ const DivFormulario = styled.div`
     background-color: #333333;
     width: 100%;
     height: 77.7vh;
+    a {
+      margin-top: 160px;
+    }
   }
 `;
 
@@ -235,7 +276,7 @@ const Formulario = styled.form`
     flex-direction: column;
     width: 100%;
     position: absolute;
-    top: 0;
+    top: 40px;
     input {
       box-sizing: border-box;
       width: 350px;
