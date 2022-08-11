@@ -29,7 +29,7 @@ export default function NewPostForm({ image, token }) {
       setContent('');
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      alert('Houve um erro ao publicar seu link!');
       setLoading(false);
     }
   }
