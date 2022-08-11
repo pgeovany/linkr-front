@@ -7,12 +7,9 @@ import UserContext from '../../../context/UserContext';
 
 export default function Timeline() {
   const navigate = useNavigate();
-  // const { token } = useContext(UserContext);
-  // const { image } = useContext(UserContext);
-
+  const { token } = useContext(UserContext);
+  const { image } = useContext(UserContext);
   const [activeMenu, setActiveMenu] = useState(false);
-  const token = 1;
-  const image = 'https://rollingstone.uol.com.br/media/uploads/killbill.jpg';
 
   useEffect(() => {
     if (!token) {

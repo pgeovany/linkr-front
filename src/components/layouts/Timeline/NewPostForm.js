@@ -1,20 +1,64 @@
+import { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import ProfilePicture from '../../shared/ProfilePicture';
 
-export default function NewPostForm({ image }) {
-  function newPost(e) {
+export default function NewPostForm({ image, token }) {
+  const [url, setUrl] = useState('');
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function publishPost(e) {
     e.preventDefault();
-    alert('Oi');
+    setLoading(true);
+
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token || ''}`,
+      },
+    };
+
+    const body = content ? { url, content } : { url };
+
+    try {
+      await axios.post(`${API_URL}/posts`, body, config);
+
+      setUrl('');
+      setContent('');
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   }
 
   return (
     <NewPostContainer>
       <ProfilePicture src={image} alt="profile" />
-      <PostForm onSubmit={(e) => newPost(e)}>
+      <PostForm onSubmit={(e) => publishPost(e)}>
         <h1>What are you going to share today?</h1>
-        <Input placeholder="https:// ..." />
-        <TallInput placeholder="Awesome article about #javascript" />
-        <Button>Publish</Button>
+        <Input
+          placeholder="https:// ..."
+          type="text"
+          name="url"
+          required
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          disabled={loading}
+        />
+        <TallInput
+          placeholder="Awesome article about #javascript"
+          type="text"
+          name="content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          disabled={loading}
+        />
+        <Button disabled={loading}>
+          {loading ? 'Publishing...' : 'Publish'}
+        </Button>
       </PostForm>
     </NewPostContainer>
   );
@@ -73,7 +117,7 @@ const Button = styled.button`
   font-family: 'Lato';
   height: 30px;
   width: 112px;
-  background: #1877f2;
+  background: ${(props) => (props.disabled ? '#12A5FF' : '#1877F2')};
   border-radius: 5px;
   border: none;
 
