@@ -55,6 +55,11 @@ const Feed = styled.div`
   flex-direction: column;
   margin-top: 80px;
   width: 48%;
+
+  @media (max-width: 900px) {
+    width: 100%;
+    margin-top: 34px;
+  }
 `;
 
 const FeedTitle = styled.h1`
@@ -63,4 +68,10 @@ const FeedTitle = styled.h1`
   font-weight: 700;
   color: white;
   margin-bottom: 44px;
+
+  @media (max-width: 900px) {
+    margin-left: 20px;
+    margin-bottom: 30px;
+    font-size: 32px;
+  }
 `;

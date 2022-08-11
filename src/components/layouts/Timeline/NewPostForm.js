@@ -36,7 +36,7 @@ export default function NewPostForm({ image, token }) {
 
   return (
     <NewPostContainer>
-      <ProfilePicture src={image} alt="profile" />
+      <PostProfilePicture src={image} alt="profile" />
       <PostForm onSubmit={(e) => publishPost(e)}>
         <h1>What are you going to share today?</h1>
         <Input
@@ -71,6 +71,17 @@ const NewPostContainer = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   display: flex;
+
+  @media (max-width: 900px) {
+    border-radius: 0px;
+    height: 190px;
+  }
+`;
+
+const PostProfilePicture = styled(ProfilePicture)`
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const PostForm = styled.form`
@@ -86,6 +97,14 @@ const PostForm = styled.form`
     font-size: 20px;
     font-weight: 300;
     margin-bottom: 10px;
+  }
+
+  @media (max-width: 900px) {
+    padding-left: 0px;
+    padding-top: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -131,5 +150,10 @@ const Button = styled.button`
 
   &&:hover {
     cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    height: 26px;
+    margin-bottom: -8px;
   }
 `;
