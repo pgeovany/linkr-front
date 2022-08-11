@@ -2,8 +2,9 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect, useContext } from "react"
 import styled from "styled-components"
 import axios from "axios"
-
+import { ThreeDots } from 'react-loader-spinner';
 import UserContext from '../../context/UserContext';
+import { setLocal, getLocal } from '../../utils/localStorageFunctions';
 import'../../assets/fonts.css'
 
 export default function Signin() {
@@ -12,16 +13,15 @@ export default function Signin() {
     const [senha, setSenha] = useState("")
     const [loadingButton, setLoadingButton] = useState(false);
 
-    const temToken = localStorage.getItem('linkrUserdata');
-    const dadosUsuario = JSON.parse(temToken);
-
+    const dadosUsuario = getLocal('linkrUserdata');
     const { setUsername, setToken, setImage } = useContext(UserContext);
 
     function Autologin(){
-        if(temToken){
-            console.log(dadosUsuario)
-            //verificar validade do token'
-            //navigate('/');
+        if(dadosUsuario){
+            setUsername(dadosUsuario.nome);
+            setToken(dadosUsuario.token);
+            setImage(dadosUsuario.foto);
+            navigate('/timeline');
         }
     }
     useEffect(() => {Autologin()}, [])
@@ -37,14 +37,14 @@ export default function Signin() {
             alert("Preencha todos os campos")
         }
 
-        const promise = axios.post("http://localhost:5000/login", data)
+        const promise = axios.post("http://localhost:4000/login", data)
         promise.then(res => {
-            console.log(res.data)
             const { nome, token, foto } = res.data
-            localStorage.setItem('linkrUserdata', JSON.stringify({
-                token: res.data.token,
-                nome: res.data.nome
-            }));
+            setLocal('linkrUserdata', {
+                token: token,
+                nome: nome,
+                foto: foto
+            });
             setUsername(nome)
             setToken(token)
             setImage(foto)
@@ -54,25 +54,23 @@ export default function Signin() {
         promise.catch(err => {
             if(err.response.status === 401){
                 alert("Usuário ou senha inválidos")
-                setLoadingButton(false);
             }
-            console.log(err)
-            
+            setLoadingButton(false);
         })
     }
 
     return (
         <Conteudo>
-            <div>
+            <LogoArea>
                 <h1>Linkr</h1>
                 <span>save, share and discover <br></br> the best links on the web</span>
-            </div>
+            </LogoArea>
             <DivFormulario>
                 <Form onSubmit={HandleSubmit}>
-                    <input type="text" placeholder="e-mail" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                    <input type="password" placeholder="password" value={senha} onChange={(e) => setSenha(e.target.value)}/>
+                    <input type="text" placeholder="e-mail" value={email} disabled={loadingButton} onChange={(e) => setEmail(e.target.value)}/>
+                    <input type="password" placeholder="password" value={senha} disabled={loadingButton} onChange={(e) => setSenha(e.target.value)}/>
                     {
-                        loadingButton ? <button disabled style={{backgroundColor: '#1877f250'}}>Carregando...</button> : <button type="submit">login In</button>
+                        loadingButton ? <button disabled={loadingButton}><ThreeDots color="white" width="120" height={45} radius="9" /></button> : <button type="submit">login In</button>
                     }
                 </Form>
                 <Link to='/signup'>First time? Create an account!</Link>
@@ -84,8 +82,13 @@ export default function Signin() {
 const Conteudo = styled.div`
 display: flex;
 font-family: 'Oswald', sans-serif;
-div:nth-child(1) {
-  width: 60%;
+@media (max-width: 900px) {
+  flex-direction: column;
+}
+`;
+
+const LogoArea = styled.div`
+width: 60%;
   color: #ffffff;
   display: flex;
   justify-content: center;
@@ -116,11 +119,7 @@ div:nth-child(1) {
     box-sizing: border-box;
     font-size: 23px;
   }
-}
-@media (max-width: 900px) {
-  flex-direction: column;
-}
-`;
+`
 
 const DivFormulario = styled.div`
   display: flex;
