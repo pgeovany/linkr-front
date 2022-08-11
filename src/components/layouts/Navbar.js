@@ -48,6 +48,7 @@ const Main = styled.div`
   width: 100%;
   padding: 0 20px 0 20px;
   background-color: #151515;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   position: fixed;
   top: 0;
   left: 0;
