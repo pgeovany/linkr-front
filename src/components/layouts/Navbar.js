@@ -9,7 +9,7 @@ export default function Navbar({ image, activeMenu, setActiveMenu }) {
 
   function logout() {
     if (!window.confirm('Você realmente deseja sair do aplicativo?')) return;
-    deleteLocal('user');
+    deleteLocal('linkrUserdata');
     navigate('/');
   }
 

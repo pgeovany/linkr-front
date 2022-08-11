@@ -4,6 +4,7 @@ import styled from "styled-components"
 import axios from "axios"
 import { ThreeDots } from 'react-loader-spinner';
 import UserContext from '../../context/UserContext';
+import { setLocal, getLocal } from '../../utils/localStorageFunctions';
 import'../../assets/fonts.css'
 
 export default function Signin() {
@@ -12,13 +13,11 @@ export default function Signin() {
     const [senha, setSenha] = useState("")
     const [loadingButton, setLoadingButton] = useState(false);
 
-    const temToken = localStorage.getItem('linkrUserdata');
-    const dadosUsuario = JSON.parse(temToken);
-
+    const dadosUsuario = getLocal('linkrUserdata');
     const { setUsername, setToken, setImage } = useContext(UserContext);
 
     function Autologin(){
-        if(temToken){
+        if(dadosUsuario){
             setUsername(dadosUsuario.nome);
             setToken(dadosUsuario.token);
             setImage(dadosUsuario.foto);
@@ -41,11 +40,11 @@ export default function Signin() {
         const promise = axios.post("http://localhost:4000/login", data)
         promise.then(res => {
             const { nome, token, foto } = res.data
-            localStorage.setItem('linkrUserdata', JSON.stringify({
+            setLocal('linkrUserdata', {
                 token: token,
                 nome: nome,
                 foto: foto
-            }));
+            });
             setUsername(nome)
             setToken(token)
             setImage(foto)
@@ -57,8 +56,6 @@ export default function Signin() {
                 alert("Usuário ou senha inválidos")
             }
             setLoadingButton(false);
-            console.log(err)
-            
         })
     }
 
