@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import UserContext from '../context/UserContext';
-import Home from './layouts/Home';
-import Navbar from './layouts/Navbar';
+import Timeline from './layouts/Timeline';
 import SignIn from './layouts/SignIn';
 import SignUp from './layouts/SignUp';
 
@@ -13,12 +12,13 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <UserContext.Provider value={{username, setUsername, image, setImage, token, setToken}}>
-        <Navbar />
+      <UserContext.Provider
+        value={{ username, setUsername, image, setImage, token, setToken }}
+      >
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/timeline" element={<Timeline />} />
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>
