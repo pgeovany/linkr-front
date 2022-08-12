@@ -186,7 +186,6 @@ const Main = styled.div`
   align-items: center;
   justify-content: space-between;
   z-index: 1;
-
   div {
     display: flex;
     align-items: center;
