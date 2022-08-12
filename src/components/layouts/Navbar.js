@@ -127,7 +127,7 @@ export default function Navbar({
 function User({ image, name, id, navigate }) {
   return (
     <UserMenuContainer
-      onClick={() => navigate(`/user/${id}`, { state: { id, name } })}
+      onClick={() => navigate(`/user/${id}`, { state: { id, name, image } })}
     >
       <SmallProfilePicture src={image} alt="profile" />
       <h1>{name}</h1>
