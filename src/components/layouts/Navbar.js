@@ -25,6 +25,48 @@ export default function Navbar({
     navigate('/');
   }
 
+  function handleMenusRendering() {
+    if (activeMenu) {
+      setActiveMenu(false);
+    }
+    if (renderUserList) {
+      setRenderUserList(false);
+    }
+  }
+
+  function genLogoutMenu() {
+    if (activeMenu) {
+      return (
+        <>
+          <UpArrow />
+          <DropDownMenu onClick={() => logout()}>
+            <h1>Logout</h1>
+          </DropDownMenu>
+        </>
+      );
+    }
+    return <DownArrow />;
+  }
+
+  function genSearchMenu() {
+    if (renderUserList) {
+      return (
+        <DropDownUserList>
+          {userList.map((user, index) => (
+            <User
+              key={index}
+              image={user.foto}
+              name={user.nome}
+              id={user.id}
+              navigate={navigate}
+            />
+          ))}
+        </DropDownUserList>
+      );
+    }
+    return null;
+  }
+
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
 
@@ -43,7 +85,6 @@ export default function Navbar({
       try {
         const { data } = await axios.get(`${API_URL}/users`, config);
         setUserList(data);
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -56,12 +97,7 @@ export default function Navbar({
     <>
       <Main
         onClick={() => {
-          if (activeMenu) {
-            setActiveMenu(false);
-          }
-          if (renderUserList) {
-            setRenderUserList(false);
-          }
+          handleMenusRendering();
         }}
       >
         <Logo>linkr</Logo>
@@ -79,43 +115,20 @@ export default function Navbar({
           <SearchIcon />
         </InputContainer>
         <div onClick={() => setActiveMenu(!activeMenu)}>
-          {activeMenu ? (
-            <>
-              <UpArrow />
-              <DropDownMenu onClick={() => logout()}>
-                <h1>Logout</h1>
-              </DropDownMenu>
-            </>
-          ) : (
-            <DownArrow />
-          )}
-          {image !== null ? (
-            <ProfilePicture src={image} alt="profile" />
-          ) : (
-            <ProfilePicture src="" alt="profile" />
-          )}
+          {genLogoutMenu()}
+          <ProfilePicture src={image ? image : ''} alt="profile" />
         </div>
       </Main>
-      {renderUserList ? (
-        <DropDownUserList>
-          {userList.map((user, index) => (
-            <User
-              key={index}
-              image={user.foto}
-              name={user.nome}
-              id={user.id}
-              navigate={navigate}
-            />
-          ))}
-        </DropDownUserList>
-      ) : null}
+      {genSearchMenu()}
     </>
   );
 }
 
 function User({ image, name, id, navigate }) {
   return (
-    <UserMenuContainer onClick={() => navigate(`/user/${id}`, { state: id })}>
+    <UserMenuContainer
+      onClick={() => navigate(`/user/${id}`, { state: { id, name } })}
+    >
       <SmallProfilePicture src={image} alt="profile" />
       <h1>{name}</h1>
     </UserMenuContainer>
@@ -236,7 +249,6 @@ const DropDownMenu = styled.div`
 const InputContainer = styled.div`
   display: flex;
   position: relative;
-  z-index: 2;
 `;
 
 const SearchIcon = styled(BsSearch)`
