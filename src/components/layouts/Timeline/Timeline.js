@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Navbar from '../Navbar';
 import NewPostForm from './NewPostForm';
 import UserContext from '../../../context/UserContext';
+import Posts from './posts/Posts';
 
 export default function Timeline() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function Timeline() {
         <Feed>
           <FeedTitle>timeline</FeedTitle>
           <NewPostForm image={image} token={token} />
+          <Posts image={image} token={token} />
         </Feed>
       </TimelineContainer>
     </>
@@ -45,7 +47,7 @@ const TimelineContainer = styled.div`
   width: 100%;
   background-color: #333333;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
 `;
@@ -55,7 +57,6 @@ const Feed = styled.div`
   flex-direction: column;
   margin-top: 80px;
   width: 48%;
-
   @media (max-width: 900px) {
     width: 100%;
     margin-top: 34px;
