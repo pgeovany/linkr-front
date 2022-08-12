@@ -114,10 +114,10 @@ export default function Navbar({
           />
           <SearchIcon />
         </InputContainer>
-        <UserMenu onClick={() => setActiveMenu(!activeMenu)}>
+        <div onClick={() => setActiveMenu(!activeMenu)}>
           {genLogoutMenu()}
           <ProfilePicture src={image ? image : ''} alt="profile" />
-        </UserMenu>
+        </div>
       </Main>
       {genSearchMenu()}
     </>
@@ -186,12 +186,12 @@ const Main = styled.div`
   align-items: center;
   justify-content: space-between;
   z-index: 1;
-`;
 
-const UserMenu = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
+  div {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
 `;
 
 const Logo = styled.div`
@@ -205,8 +205,8 @@ const UpArrow = styled(BsChevronUp)`
   color: white;
   font-size: 36px;
   padding-right: 10px;
-  /* position: absolute;
-  right: 50px; */
+  position: absolute;
+  right: 50px;
 
   &&:hover {
     cursor: pointer;
@@ -225,13 +225,12 @@ const DownArrow = styled(BsChevronDown)`
 
 const DropDownMenu = styled.div`
   height: 50px;
-  width: 130px;
+  width: 120px;
   background-color: #151515;
-  border-bottom-left-radius: 20px;
-
   position: absolute;
   top: 60px;
-  left: -20px;
+  left: 70px;
+  border-bottom-left-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
