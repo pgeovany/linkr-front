@@ -10,6 +10,7 @@ export default function Timeline() {
   const { token } = useContext(UserContext);
   const { image } = useContext(UserContext);
   const [activeMenu, setActiveMenu] = useState(false);
+  const [renderUserList, setRenderUserList] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -20,14 +21,20 @@ export default function Timeline() {
   return (
     <>
       <Navbar
+        token={token}
         image={image}
         activeMenu={activeMenu}
         setActiveMenu={setActiveMenu}
+        renderUserList={renderUserList}
+        setRenderUserList={setRenderUserList}
       />
       <TimelineContainer
         onClick={() => {
           if (activeMenu) {
             setActiveMenu(false);
+          }
+          if (renderUserList) {
+            setRenderUserList(false);
           }
         }}
       >
