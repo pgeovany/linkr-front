@@ -9,7 +9,7 @@ export default function App() {
   const [username, setUsername] = useState(null);
   const [image, setImage] = useState(null);
   const [token, setToken] = useState(null);
-  const [updateListPosts, serUpdateListPosts] = useState(0);
+  const [updateListPosts, setUpdateListPosts] = useState(0);
 
   return (
     <BrowserRouter>
@@ -21,7 +21,7 @@ export default function App() {
           setImage,
           token,
           setToken,
-          serUpdateListPosts,
+          setUpdateListPosts,
           updateListPosts,
         }}
       >
