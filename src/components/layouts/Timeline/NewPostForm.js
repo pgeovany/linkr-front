@@ -13,15 +13,12 @@ export default function NewPostForm({ image, token }) {
     setLoading(true);
 
     const API_URL = process.env.REACT_APP_API_URL;
-    console.log(process.env.REACT_APP_API_URL);
     const config = {
       headers: {
         Authorization: `Bearer ${token || ''}`,
       },
     };
-
     const body = content ? { url, content } : { url };
-    console.log(body);
 
     try {
       await axios.post(`${API_URL}/posts`, body, config);
