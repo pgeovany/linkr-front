@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from 'axios';
 import styled from 'styled-components';
 
 function HashtagItem({ id, name }) {
     return (
-        <p onClick={() => {console.log(id)}}># {name}</p>
+        <p><Link to={`/hashtag/${name}`}># {name}</Link></p>
     )
 }
 
@@ -19,12 +19,9 @@ export default function HashtagsBox() {
         const promise = axios.get(`${API_URL}/trending`)
         promise.then(res => {
             setHashtags(res.data)
-            console.log(res.data)
         });
         promise.catch(err => {
-            console.log(err)
             navigate('/')
-            
         })
     },[])
 
@@ -82,13 +79,15 @@ const HashtagsBoxContainer = styled.div`
     position: fixed;
     top: 240px;
     margin: 0px 20px 0 0;
-    p {
+    a {
         font-family: 'Oswald', sans-serif;
         font-size: 19px;
         font-weight: 400;
         color: #FFFFFF;
         padding-left: 16px;
         line-height: 34px;
+        cursor: pointer;
+        text-decoration: none;
     }
 
 `
