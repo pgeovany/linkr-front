@@ -32,15 +32,19 @@ export default function Signin() {
   function HandleSubmit(e) {
     e.preventDefault();
     setLoadingButton(true);
+
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const data = {
       email,
       senha,
     };
+
     if (email === '' || senha === '') {
       alert('Preencha todos os campos');
     }
 
-    const promise = axios.post('http://localhost:5000/login', data);
+    const promise = axios.post(`${API_URL}/login`, data);
     promise.then((res) => {
       const { nome, token, foto } = res.data;
       setLocal('linkrUserdata', {
@@ -61,7 +65,6 @@ export default function Signin() {
       setLoadingButton(false);
     });
   }
-
   return (
     <Conteudo>
       <LogoArea>

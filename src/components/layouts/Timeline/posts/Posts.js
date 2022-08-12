@@ -33,7 +33,6 @@ export default function Posts({ token }) {
         setThereArePosts('warning');
       });
   }, [token, updateListPosts]);
-  console.log(allPosts);
 
   return (
     <>
