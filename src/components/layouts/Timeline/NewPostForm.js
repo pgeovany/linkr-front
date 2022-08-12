@@ -71,6 +71,7 @@ const NewPostContainer = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   display: flex;
+  z-index: 0;
 
   @media (max-width: 900px) {
     border-radius: 0px;

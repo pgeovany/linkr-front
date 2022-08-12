@@ -29,6 +29,9 @@ export default function Signin() {
     function HandleSubmit(e) {
         e.preventDefault()
         setLoadingButton(true);
+
+        const API_URL = process.env.REACT_APP_API_URL;
+
         const data = {
             email,
             senha
@@ -37,7 +40,7 @@ export default function Signin() {
             alert("Preencha todos os campos")
         }
 
-        const promise = axios.post("http://localhost:4000/login", data)
+        const promise = axios.post(`${API_URL}/login`, data)
         promise.then(res => {
             const { nome, token, foto } = res.data
             setLocal('linkrUserdata', {
