@@ -1,36 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import ListPosts from './ListPosts';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
 import { Sad } from 'react-ionicons';
+import { Warning } from 'react-ionicons';
+import ListPosts from './ListPosts';
+import UserContext from '../../../../context/UserContext';
 
-export default function Posts({ image, token }) {
+export default function Posts({ token }) {
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
+  const { updateListPosts } = useContext(UserContext);
+
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibm9tZSI6Imx1Y2FzIiwiZW1haWwiOiJsdWNhcy45Y2FicmFsNDFAZ21haWwuY29tIiwic2VuaGEiOiIkMmIkMTAkQy5aTjlCWVQxdXhhNkh4SlN3RkVET1hlQzRpcVZ3NEsva2ZUTmdpaThFdjdrN1RMZWg0UjIiLCJmb3RvIjoiaHR0cHM6Ly9vYnNlcnZhdG9yaW9kb2NpbmVtYS51b2wuY29tLmJyL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA3L2RyYWdvbi1iYWxsLXN1cGVyLTEyMDB4OTAwLTEuanBnIiwiY3JpYWRvX2VtIjoiMjAyMi0wOC0xMFQyMDowMjo0OS4wNThaIiwiaWF0IjoxNjYwMzEyNDY5LCJleHAiOjE2NjAzOTg4Njl9.H27e-0oS4NloL05UNlmT3rZw-AAJbMNJQ9CKxLueC1A`,
+        Authorization: `Bearer ${token || ''}`,
       },
     };
-
     const promise = axios.get(`${API_URL}/posts`, config);
     promise
       .then((res) => {
         const Posts = res.data;
         if (Posts.length === 0) {
-          setThereArePosts('empty');
-        } else {
-          setAllPosts(Posts);
+          return setThereArePosts('empty');
         }
+        setThereArePosts('loaded');
+        setAllPosts(Posts);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((_) => {
+        setThereArePosts('warning');
       });
-  }, [allPosts]);
+  }, [token, updateListPosts]);
   console.log(allPosts);
+
   return (
     <>
       {thereArePosts === 'loading' ? (
@@ -42,8 +46,28 @@ export default function Posts({ image, token }) {
           <Sad color="white" width="50px" height="40px" />
           <h2>There are no posts yet</h2>
         </Empty>
+      ) : thereArePosts === 'warning' ? (
+        <WarningDiv>
+          <Warning color="yellow" width="50px" height="40px" />
+          <h2>
+            An error occured while trying to fetch the posts, please refresh the
+            page
+          </h2>
+        </WarningDiv>
       ) : (
-        <ListPosts />
+        allPosts?.map((post, id) => (
+          <ListPosts
+            key={id}
+            idPost={post.id}
+            name={post.user.name}
+            conteudo={post.conteudo}
+            picture={post.user.picture}
+            url={post.url}
+            urlTitle={post.urlTitle}
+            urlImage={post.urlImage}
+            urlDescription={post.urlDescription}
+          />
+        ))
       )}
     </>
   );
@@ -72,4 +96,19 @@ const Empty = styled.div`
   font-size: 25px;
   box-sizing: border-box;
   align-items: center;
+`;
+const WarningDiv = styled.div`
+  width: 100%;
+  height: 100mm;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 25px;
+  color: white;
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 25px;
+  box-sizing: border-box;
+  align-items: center;
+  text-align: center;
 `;

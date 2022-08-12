@@ -35,7 +35,7 @@ export default function Timeline() {
         <Feed>
           <FeedTitle>timeline</FeedTitle>
           <NewPostForm image={image} token={token} />
-          <Posts image={image} token={token} />
+          <Posts token={token} />
         </Feed>
       </TimelineContainer>
     </>

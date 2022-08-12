@@ -14,19 +14,29 @@ import { useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline } from 'react-ionicons';
 
-export default function ListPosts() {
+export default function ListPosts({
+  idPost,
+  name,
+  conteudo,
+  picture,
+  url,
+  urlTitle,
+  urlImage,
+  urlDescription,
+}) {
   const [like, setLike] = useState(false);
   return (
-    <ContainerPost>
+    <ContainerPost id={idPost}>
       <Title>
         <Actions>
-          <PostProfilePicture src="" alt="profile" />
+          <PostProfilePicture src={picture} alt="profile" />
           {like ? (
             <Heart
               color="#AC0000"
               width="70px"
               height="30px"
               style={{ cursor: 'pointer' }}
+              onClick={() => setLike(!like)}
             />
           ) : (
             <HeartOutline
@@ -34,39 +44,27 @@ export default function ListPosts() {
               width="70px"
               height="30px"
               style={{ cursor: 'pointer' }}
+              onClick={() => setLike(!like)}
             />
           )}
           <span>13 likes</span>
         </Actions>
         <UserTitle>
-          <h2>Juvenal Juvêncio </h2>
-          <p>
-            Muito maneiro esse tutorial de Material UI com React, deem uma
-            olhada!
-          </p>
+          <h2>{name}</h2>
+          <p>{conteudo}</p>
         </UserTitle>
       </Title>
       <ContainerContents>
         <BarraInvisivel></BarraInvisivel>
         <BoxContents>
           <Box>
-            <h2>Como aplicar o Material UI em um projeto React</h2>
-            <p>
-              Hey! I have moved this tutorial to my personal blog. Same content,
-              new location. Sorry about making you click through to another
-              page.
-            </p>
-            <a
-              href="https://medium.com/@pshrmn/a-simple-react-router"
-              target="blank"
-            >
-              https://medium.com/@pshrmn/a-simple-react-router
+            <h2>{urlTitle}</h2>
+            <p>{urlDescription}</p>
+            <a href={url} target="blank">
+              {url}
             </a>
           </Box>
-          <ProfileLink
-            src="https://observatoriodocinema.uol.com.br/wp-content/uploads/2021/07/dragon-ball-super-1200x900-1.jpg"
-            alt="ProfileLink"
-          />
+          <ProfileLink src={urlImage} alt="ProfileLink" />
         </BoxContents>
       </ContainerContents>
     </ContainerPost>
