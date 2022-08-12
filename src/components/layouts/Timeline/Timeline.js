@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Navbar from '../Navbar';
+import Navbar from '../Navbar/Navbar';
 import NewPostForm from './NewPostForm';
 import UserContext from '../../../context/UserContext';
 
