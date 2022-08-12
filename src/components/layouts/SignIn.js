@@ -1,97 +1,118 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useState, useEffect, useContext } from "react"
-import styled from "styled-components"
-import axios from "axios"
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
 import { ThreeDots } from 'react-loader-spinner';
 import UserContext from '../../context/UserContext';
 import { setLocal, getLocal } from '../../utils/localStorageFunctions';
-import'../../assets/fonts.css'
+import '../../assets/fonts.css';
 
 export default function Signin() {
-    const navigate = useNavigate()
-    const [email, setEmail] = useState("")
-    const [senha, setSenha] = useState("")
-    const [loadingButton, setLoadingButton] = useState(false);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [loadingButton, setLoadingButton] = useState(false);
 
-    const dadosUsuario = getLocal('linkrUserdata');
-    const { setUsername, setToken, setImage } = useContext(UserContext);
+  const dadosUsuario = getLocal('linkrUserdata');
 
-    function Autologin(){
-        if(dadosUsuario){
-            setUsername(dadosUsuario.nome);
-            setToken(dadosUsuario.token);
-            setImage(dadosUsuario.foto);
-            navigate('/timeline');
-        }
+  const { setUsername, setToken, setImage } = useContext(UserContext);
+
+  function Autologin() {
+    if (dadosUsuario) {
+      setUsername(dadosUsuario.nome);
+      setToken(dadosUsuario.token);
+      setImage(dadosUsuario.foto);
+      navigate('/timeline');
     }
-    useEffect(() => {Autologin()}, [])
+  }
+  useEffect(() => {
+    Autologin();
+  }, []);
 
-    function HandleSubmit(e) {
-        e.preventDefault()
-        setLoadingButton(true);
+  function HandleSubmit(e) {
+    e.preventDefault();
+    setLoadingButton(true);
 
-        const API_URL = process.env.REACT_APP_API_URL;
+    const API_URL = process.env.REACT_APP_API_URL;
 
-        const data = {
-            email,
-            senha
-        }
-        if(email === "" || senha === ""){
-            alert("Preencha todos os campos")
-        }
+    const data = {
+      email,
+      senha,
+    };
 
-        const promise = axios.post(`${API_URL}/login`, data)
-        promise.then(res => {
-            const { nome, token, foto } = res.data
-            setLocal('linkrUserdata', {
-                token: token,
-                nome: nome,
-                foto: foto
-            });
-            setUsername(nome)
-            setToken(token)
-            setImage(foto)
-            setLoadingButton(false);
-            navigate("/timeline")
-        });
-        promise.catch(err => {
-            if(err.response.status === 401){
-                alert("Usuário ou senha inválidos")
-            }
-            setLoadingButton(false);
-        })
+    if (email === '' || senha === '') {
+      alert('Preencha todos os campos');
     }
 
-    return (
-        <Conteudo>
-            <LogoArea>
-                <h1>Linkr</h1>
-                <span>save, share and discover <br></br> the best links on the web</span>
-            </LogoArea>
-            <DivFormulario>
-                <Form onSubmit={HandleSubmit}>
-                    <input type="text" placeholder="e-mail" value={email} disabled={loadingButton} onChange={(e) => setEmail(e.target.value)}/>
-                    <input type="password" placeholder="password" value={senha} disabled={loadingButton} onChange={(e) => setSenha(e.target.value)}/>
-                    {
-                        loadingButton ? <button disabled={loadingButton}><ThreeDots color="white" width="120" height={45} radius="9" /></button> : <button type="submit">login In</button>
-                    }
-                </Form>
-                <Link to='/signup'>First time? Create an account!</Link>
-            </DivFormulario>
-        </Conteudo>    
-    )
+    const promise = axios.post(`${API_URL}/login`, data);
+    promise.then((res) => {
+      const { nome, token, foto } = res.data;
+      setLocal('linkrUserdata', {
+        token: token,
+        nome: nome,
+        foto: foto,
+      });
+      setUsername(nome);
+      setToken(token);
+      setImage(foto);
+      setLoadingButton(false);
+      navigate('/timeline');
+    });
+    promise.catch((err) => {
+      if (err.response.status === 401) {
+        alert('Usuário ou senha inválidos');
+      }
+      setLoadingButton(false);
+    });
+  }
+  return (
+    <Conteudo>
+      <LogoArea>
+        <h1>Linkr</h1>
+        <span>
+          save, share and discover <br></br> the best links on the web
+        </span>
+      </LogoArea>
+      <DivFormulario>
+        <Form onSubmit={HandleSubmit}>
+          <input
+            type="text"
+            placeholder="e-mail"
+            value={email}
+            disabled={loadingButton}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={senha}
+            disabled={loadingButton}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+          {loadingButton ? (
+            <button disabled={loadingButton}>
+              <ThreeDots color="white" width="120" height={45} radius="9" />
+            </button>
+          ) : (
+            <button type="submit">login In</button>
+          )}
+        </Form>
+        <Link to="/signup">First time? Create an account!</Link>
+      </DivFormulario>
+    </Conteudo>
+  );
 }
 
 const Conteudo = styled.div`
-display: flex;
-font-family: 'Oswald', sans-serif;
-@media (max-width: 900px) {
-  flex-direction: column;
-}
+  display: flex;
+  font-family: 'Oswald', sans-serif;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const LogoArea = styled.div`
-width: 60%;
+  width: 60%;
   color: #ffffff;
   display: flex;
   justify-content: center;
@@ -111,7 +132,7 @@ width: 60%;
     line-height: 1.2;
 
     @media (max-width: 900px) {
-        font-size: 23px;
+      font-size: 23px;
     }
   }
   @media (max-width: 900px) {
@@ -122,7 +143,7 @@ width: 60%;
     box-sizing: border-box;
     font-size: 23px;
   }
-`
+`;
 
 const DivFormulario = styled.div`
   display: flex;
@@ -150,9 +171,8 @@ const DivFormulario = styled.div`
     flex-direction: column;
     background-color: #333333;
     width: 100%;
-    height: 77.7vh;    
+    height: 77.7vh;
   }
-
 `;
 
 const Form = styled.form`

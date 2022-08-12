@@ -1,25 +1,25 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import ProfilePicture from '../../shared/ProfilePicture';
+import UserContext from '../../../context/UserContext';
 
 export default function NewPostForm({ image, token }) {
   const [url, setUrl] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const { updateListPosts, setUpdateListPosts } = useContext(UserContext);
 
   async function publishPost(e) {
     e.preventDefault();
     setLoading(true);
 
     const API_URL = process.env.REACT_APP_API_URL;
-
     const config = {
       headers: {
         Authorization: `Bearer ${token || ''}`,
       },
     };
-
     const body = content ? { url, content } : { url };
 
     try {
@@ -27,8 +27,10 @@ export default function NewPostForm({ image, token }) {
 
       setUrl('');
       setContent('');
+      setUpdateListPosts(updateListPosts + 1);
       setLoading(false);
     } catch (error) {
+      console.log(error);
       alert('Houve um erro ao publicar seu link!');
       setLoading(false);
     }

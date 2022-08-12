@@ -9,11 +9,21 @@ export default function App() {
   const [username, setUsername] = useState(null);
   const [image, setImage] = useState(null);
   const [token, setToken] = useState(null);
+  const [updateListPosts, setUpdateListPosts] = useState(0);
 
   return (
     <BrowserRouter>
       <UserContext.Provider
-        value={{ username, setUsername, image, setImage, token, setToken }}
+        value={{
+          username,
+          setUsername,
+          image,
+          setImage,
+          token,
+          setToken,
+          setUpdateListPosts,
+          updateListPosts,
+        }}
       >
         <Routes>
           <Route path="/" element={<SignIn />} />
