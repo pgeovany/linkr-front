@@ -30,6 +30,7 @@ export default function NewPostForm({ image, token }) {
       setUpdateListPosts(updateListPosts + 1);
       setLoading(false);
     } catch (error) {
+      console.log(error);
       alert('Houve um erro ao publicar seu link!');
       setLoading(false);
     }
