@@ -13,6 +13,7 @@ import {
 import { useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline } from 'react-ionicons';
+import axios from 'axios';
 
 export default function ListPosts({
   idPost,
@@ -23,8 +24,37 @@ export default function ListPosts({
   urlTitle,
   urlImage,
   urlDescription,
+  token,
 }) {
   const [like, setLike] = useState(false);
+
+  async function likePost() {
+    const API_URL = process.env.REACT_APP_API_URL;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token || ''}`,
+      },
+    };
+    const body = {
+      idPost,
+    };
+    if (like === false) {
+      try {
+        await axios.post(`${API_URL}`, body, config);
+        setLike(!like);
+      } catch (error) {
+        alert('Ocorreu um erro ao tentar dar um like no post');
+      }
+    } else {
+      try {
+        await axios.delete(`${API_URL}`, body, config);
+        setLike(!like);
+      } catch (error) {
+        alert('Ocorreu um erro ao tentar dar um deslike no post');
+      }
+    }
+  }
+
   return (
     <ContainerPost id={idPost}>
       <Title>
@@ -36,7 +66,7 @@ export default function ListPosts({
               width="70px"
               height="30px"
               style={{ cursor: 'pointer' }}
-              onClick={() => setLike(!like)}
+              onClick={likePost}
             />
           ) : (
             <HeartOutline

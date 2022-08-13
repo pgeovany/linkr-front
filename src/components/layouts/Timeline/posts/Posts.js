@@ -19,7 +19,7 @@ export default function Posts({ token }) {
         Authorization: `Bearer ${token || ''}`,
       },
     };
-    const promise = axios.get(`${API_URL}/posts`, config);
+    const promise = axios.get(`${API_URL}posts`, config);
     promise
       .then((res) => {
         const Posts = res.data;

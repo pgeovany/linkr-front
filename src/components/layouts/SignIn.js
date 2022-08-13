@@ -10,7 +10,7 @@ import '../../assets/fonts.css';
 export default function Signin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
   const [loadingButton, setLoadingButton] = useState(false);
 
   const dadosUsuario = getLocal('linkrUserdata');
@@ -37,14 +37,14 @@ export default function Signin() {
 
     const data = {
       email,
-      senha,
+      password,
     };
 
-    if (email === '' || senha === '') {
+    if (email === '' || password === '') {
       alert('Preencha todos os campos');
     }
 
-    const promise = axios.post(`${API_URL}/login`, data);
+    const promise = axios.post(`${API_URL}login`, data);
     promise.then((res) => {
       const { nome, token, foto } = res.data;
       setLocal('linkrUserdata', {
@@ -59,6 +59,7 @@ export default function Signin() {
       navigate('/timeline');
     });
     promise.catch((err) => {
+      console.log(err);
       if (err.response.status === 401) {
         alert('Usuário ou senha inválidos');
       }
@@ -85,9 +86,9 @@ export default function Signin() {
           <input
             type="password"
             placeholder="password"
-            value={senha}
+            value={password}
             disabled={loadingButton}
-            onChange={(e) => setSenha(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           {loadingButton ? (
             <button disabled={loadingButton}>
