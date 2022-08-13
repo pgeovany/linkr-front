@@ -1,23 +1,37 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
 import UserContext from '../../../context/UserContext';
 
+import { setLocal, getLocal } from '../../../utils/localStorageFunctions.js';
 import Navbar from '../Navbar';
 import HashtagsBox from './HashtagsBox';
 import axios from "axios";
 
 export default function Trend(){
     const trendName = useParams().hashtag;
-    const { token, image } = useContext(UserContext);
+    const { token, image, setUsername, setToken, setImage } = useContext(UserContext);
     const [activeMenu, setActiveMenu] = useState(false);
     const [renderUserList, setRenderUserList] = useState(false);
     const API_URL = process.env.REACT_APP_API_URL;
+    const navigate = useNavigate();
+    const dadosUsuario = getLocal('linkrUserdata');
+
+    function AtualizaUsuario(){
+        if(dadosUsuario){
+            setUsername(dadosUsuario.nome);
+            setToken(dadosUsuario.token);
+            setImage(dadosUsuario.foto);
+        } else {
+            navigate('/');
+        }
+    }
 
     useEffect(() => {
         const promise = axios.get(`${API_URL}/trending/${trendName}`);
         promise.then(res => {
+            AtualizaUsuario();
             console.log(res.data);
         });
         promise.catch(err => {
