@@ -55,8 +55,8 @@ export default function Navbar({
           {userList.map((user, index) => (
             <SearchResult
               key={index}
-              image={user.foto}
-              name={user.nome}
+              image={user.image}
+              name={user.name}
               id={user.id}
               navigate={navigate}
             />
