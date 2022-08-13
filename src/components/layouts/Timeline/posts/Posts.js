@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -12,34 +11,30 @@ export default function Posts({ token, userId }) {
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
   const { updateListPosts } = useContext(UserContext);
-  const location = useLocation();
 
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
-    const config = {
+    let config = {
       headers: {
         Authorization: `Bearer ${token || ''}`,
       },
+      params: { id: userId },
     };
 
-    if (location.pathname === '/timeline') {
-      const promise = axios.get(`${API_URL}/posts`, config);
-      promise
-        .then((res) => {
-          const Posts = res.data;
-          if (Posts.length === 0) {
-            return setThereArePosts('empty');
-          }
-          setThereArePosts('loaded');
-          setAllPosts(Posts);
-        })
-        .catch((_) => {
-          setThereArePosts('warning');
-        });
-    } else if (userId) {
-      console.log(userId);
-    }
-  }, [token, updateListPosts]); // eslint-disable-line
+    const promise = axios.get(`${API_URL}/posts`, config);
+    promise
+      .then((res) => {
+        const Posts = res.data;
+        if (Posts.length === 0) {
+          return setThereArePosts('empty');
+        }
+        setThereArePosts('loaded');
+        setAllPosts(Posts);
+      })
+      .catch((_) => {
+        setThereArePosts('warning');
+      });
+  }, [token, updateListPosts, userId]); // eslint-disable-line
 
   return (
     <>
@@ -67,7 +62,7 @@ export default function Posts({ token, userId }) {
             idPost={post.id}
             name={post.user.name}
             idUser={post.user.id}
-            conteudo={post.conteudo}
+            conteudo={post.content}
             picture={post.user.picture}
             url={post.url}
             urlTitle={post.urlTitle}

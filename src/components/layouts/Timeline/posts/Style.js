@@ -53,6 +53,10 @@ const UserTitle = styled.div`
     font-family: 'Lato';
     flex-wrap: wrap;
     margin-bottom: 10px;
+
+    :hover {
+      cursor: pointer;
+    }
   }
   p {
     color: white;
