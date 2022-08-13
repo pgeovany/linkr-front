@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -7,10 +8,11 @@ import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
 
-export default function Posts({ token }) {
+export default function Posts({ token, userId }) {
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
   const { updateListPosts } = useContext(UserContext);
+  const location = useLocation();
 
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -19,20 +21,25 @@ export default function Posts({ token }) {
         Authorization: `Bearer ${token || ''}`,
       },
     };
-    const promise = axios.get(`${API_URL}/posts`, config);
-    promise
-      .then((res) => {
-        const Posts = res.data;
-        if (Posts.length === 0) {
-          return setThereArePosts('empty');
-        }
-        setThereArePosts('loaded');
-        setAllPosts(Posts);
-      })
-      .catch((_) => {
-        setThereArePosts('warning');
-      });
-  }, [token, updateListPosts]);
+
+    if (location.pathname === '/timeline') {
+      const promise = axios.get(`${API_URL}/posts`, config);
+      promise
+        .then((res) => {
+          const Posts = res.data;
+          if (Posts.length === 0) {
+            return setThereArePosts('empty');
+          }
+          setThereArePosts('loaded');
+          setAllPosts(Posts);
+        })
+        .catch((_) => {
+          setThereArePosts('warning');
+        });
+    } else if (userId) {
+      console.log(userId);
+    }
+  }, [token, updateListPosts]); // eslint-disable-line
 
   return (
     <>
