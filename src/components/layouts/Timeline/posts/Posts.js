@@ -59,6 +59,7 @@ export default function Posts({ token }) {
             key={id}
             idPost={post.id}
             name={post.user.name}
+            idUser={post.user.id}
             conteudo={post.conteudo}
             picture={post.user.picture}
             url={post.url}
