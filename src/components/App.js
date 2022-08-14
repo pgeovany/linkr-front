@@ -4,7 +4,9 @@ import UserContext from '../context/UserContext';
 import Timeline from './layouts/Timeline/Timeline';
 import SignIn from './layouts/SignIn';
 import SignUp from './layouts/SignUp';
+import Trend from './layouts/Timeline/Trend';
 import UserPage from './layouts/UserPage';
+
 
 export default function App() {
   const [username, setUsername] = useState(null);
@@ -30,6 +32,7 @@ export default function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/timeline" element={<Timeline />} />
+          <Route path="/hashtag/:hashtag" element={<Trend />} />
           <Route path="/user/:id" element={<UserPage />} />
         </Routes>
       </UserContext.Provider>

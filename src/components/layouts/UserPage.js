@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Navbar from './Navbar/Navbar';
 import UserContext from '../../context/UserContext';
 import Posts from './Timeline/posts/Posts';
+import HashtagsBox from './Timeline/HashtagsBox';
 
 export default function UserPage() {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ export default function UserPage() {
           </Header>
           <Posts token={token} userId={userInfo.id} />
         </Feed>
+        <HashtagsBox />
       </TimelineContainer>
     </>
   );
