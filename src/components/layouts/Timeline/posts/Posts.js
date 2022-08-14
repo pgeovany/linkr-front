@@ -34,7 +34,7 @@ export default function Posts({ token, userId }) {
       .catch((_) => {
         setThereArePosts('warning');
       });
-  }, [token, updateListPosts, userId]); // eslint-disable-line
+  }, [updateListPosts, userId]); // eslint-disable-line
 
   return (
     <>
@@ -68,6 +68,7 @@ export default function Posts({ token, userId }) {
             urlTitle={post.urlTitle}
             urlImage={post.urlImage}
             urlDescription={post.urlDescription}
+            token={token}
             likedBy={post.likedBy}
             likes={post.likes}
           />

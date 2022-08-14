@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -16,18 +16,18 @@ export default function TrendingPosts( { token, trendName } ) {
     const { updateListPosts, userId, setUsername, setToken, setImage } = useContext(UserContext);
     const dadosUsuario = getLocal('linkrUserdata');
 
-    const navigate = useNavigate();
-    console.log(allPosts, thereArePosts)
+  const navigate = useNavigate();
+  console.log(allPosts, thereArePosts);
 
-    function AtualizaUsuario(){
-    if(dadosUsuario){
-        setUsername(dadosUsuario.name);
-        setToken(dadosUsuario.token);
-        setImage(dadosUsuario.image);
+  function AtualizaUsuario() {
+    if (dadosUsuario) {
+      setUsername(dadosUsuario.name);
+      setToken(dadosUsuario.token);
+      setImage(dadosUsuario.image);
     } else {
-        navigate('/');
+      navigate('/');
     }
-}
+  }
 
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -48,14 +48,13 @@ export default function TrendingPosts( { token, trendName } ) {
         }
         setThereArePosts('loaded');
         setAllPosts(Posts);
-        console.log(Posts)
+        console.log(Posts);
         AtualizaUsuario();
       })
       .catch((_) => {
         setThereArePosts('warning');
       });
   }, [token, updateListPosts, trendName]);
-
 
   return (
     <>
@@ -83,7 +82,7 @@ export default function TrendingPosts( { token, trendName } ) {
             idPost={post.id}
             name={post.user.name}
             idUser={post.user.id}
-            conteudo={post.conteudo}
+            conteudo={post.content}
             picture={post.user.picture}
             url={post.url}
             urlTitle={post.urlTitle}
@@ -96,7 +95,6 @@ export default function TrendingPosts( { token, trendName } ) {
       )}
     </>
   );
-
 }
 
 const Spiner = styled.div`
