@@ -19,15 +19,15 @@ export default function Signin() {
 
   function Autologin() {
     if (dadosUsuario) {
-      setUsername(dadosUsuario.nome);
+      setUsername(dadosUsuario.name);
       setToken(dadosUsuario.token);
-      setImage(dadosUsuario.foto);
+      setImage(dadosUsuario.image);
       navigate('/timeline');
     }
   }
   useEffect(() => {
     Autologin();
-  }, []);
+  }, []); //eslint-disable-line
 
   function HandleSubmit(e) {
     e.preventDefault();
@@ -37,7 +37,11 @@ export default function Signin() {
 
     const data = {
       email,
+<<<<<<< HEAD
       password,
+=======
+      password: senha,
+>>>>>>> 190216b353121328f6f7deb5328ee78c94c4fae5
     };
 
     if (email === '' || password === '') {
@@ -46,15 +50,15 @@ export default function Signin() {
 
     const promise = axios.post(`${API_URL}/login`, data);
     promise.then((res) => {
-      const { nome, token, foto } = res.data;
+      const { name, token, image } = res.data;
       setLocal('linkrUserdata', {
         token: token,
-        nome: nome,
-        foto: foto,
+        name,
+        image,
       });
-      setUsername(nome);
+      setUsername(name);
       setToken(token);
-      setImage(foto);
+      setImage(image);
       setLoadingButton(false);
       navigate('/timeline');
     });

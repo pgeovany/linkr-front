@@ -14,10 +14,12 @@ import { useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline } from 'react-ionicons';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function ListPosts({
   idPost,
   name,
+  idUser,
   conteudo,
   picture,
   url,
@@ -38,10 +40,8 @@ export default function ListPosts({
     const body = {
       idPost,
     };
-    console.log(idPost);
     if (like === false) {
       try {
-        console.log('ENTREIIII');
         await axios.post(`${API_URL}/likes`, body, config);
         setLike(!like);
       } catch (error) {
@@ -57,6 +57,7 @@ export default function ListPosts({
     }
   }
 
+  const navigate = useNavigate();
   return (
     <ContainerPost id={idPost}>
       <Title>
@@ -82,7 +83,15 @@ export default function ListPosts({
           <span>13 likes</span>
         </Actions>
         <UserTitle>
-          <h2>{name}</h2>
+          <h2
+            onClick={() =>
+              navigate(`/user/${idUser}`, {
+                state: { id: idUser, name, image: picture },
+              })
+            }
+          >
+            {name}
+          </h2>
           <p>{conteudo}</p>
         </UserTitle>
       </Title>

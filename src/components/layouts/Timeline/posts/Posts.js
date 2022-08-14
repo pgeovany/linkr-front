@@ -7,18 +7,20 @@ import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
 
-export default function Posts({ token }) {
+export default function Posts({ token, userId }) {
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
   const { updateListPosts } = useContext(UserContext);
 
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
-    const config = {
+    let config = {
       headers: {
         Authorization: `Bearer ${token || ''}`,
       },
+      params: { id: userId },
     };
+
     const promise = axios.get(`${API_URL}/posts`, config);
     promise
       .then((res) => {
@@ -32,7 +34,7 @@ export default function Posts({ token }) {
       .catch((_) => {
         setThereArePosts('warning');
       });
-  }, [updateListPosts]);
+  }, [updateListPosts, userId]); // eslint-disable-line
 
   return (
     <>
@@ -59,6 +61,7 @@ export default function Posts({ token }) {
             key={id}
             idPost={post.id}
             name={post.user.name}
+            idUser={post.user.id}
             conteudo={post.content}
             picture={post.user.picture}
             url={post.url}
