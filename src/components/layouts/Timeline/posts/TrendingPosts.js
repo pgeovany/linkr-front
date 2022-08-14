@@ -7,13 +7,13 @@ import { Sad } from 'react-ionicons';
 import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
-import { setLocal, getLocal } from '../../../../utils/localStorageFunctions.js';
+import { getLocal } from '../../../../utils/localStorageFunctions.js';
 
 export default function TrendingPosts( { token, trendName } ) {
     const [allPosts, setAllPosts] = useState([]);
     const [thereArePosts, setThereArePosts] = useState('loading');
     const [trendPosts, setTrendPosts] = useState([]);
-    const { updateListPosts, userId, setUsername, setToken, setImage } = useContext(UserContext);
+    const { updateListPosts, setUsername, setToken, setImage } = useContext(UserContext);
     const dadosUsuario = getLocal('linkrUserdata');
 
   const navigate = useNavigate();
@@ -34,11 +34,8 @@ export default function TrendingPosts( { token, trendName } ) {
     const config = {
         headers: {
             Authorization: `Bearer ${token || ''}`,
-            params: userId,
         },
-         
     };
-    console.log(userId)
     const promise = axios.get(`${API_URL}/trending/${trendName}`, config);
     promise
       .then((res) => {

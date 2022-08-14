@@ -1,10 +1,8 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from 'react';
+import { useParams } from "react-router-dom";
+import { useState, useContext } from 'react';
 import styled from 'styled-components';
-import axios from "axios";
 
 import UserContext from '../../../context/UserContext';
-
 
 import Navbar from '../../layouts/Navbar/Navbar';
 import HashtagsBox from './HashtagsBox';
@@ -13,18 +11,9 @@ import TrendingPosts from './posts/TrendingPosts';
 
 export default function Trend(){
     const trendName = useParams().hashtag;
-    const { token, image, setUsername, setToken, setImage } = useContext(UserContext);
+    const { token, image } = useContext(UserContext);
     const [activeMenu, setActiveMenu] = useState(false);
     const [renderUserList, setRenderUserList] = useState(false);
-
- 
-
-
-
-
-
-
-
 
     return(
         <>
