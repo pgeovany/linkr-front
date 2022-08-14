@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom"
 import axios from 'axios';
 import styled from 'styled-components';
+import UserContext from '../../../context/UserContext';
 
 function HashtagItem({ id, name }) {
     return (
@@ -11,14 +12,21 @@ function HashtagItem({ id, name }) {
 
 export default function HashtagsBox() {
     const [hashtags, setHashtags] = useState([]);
+    const { token } = useContext(UserContext);
     const API_URL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
 
     useEffect(() => {
+        const config = {
+            headers: {
+              Authorization: `Bearer ${token || ''}`,
+            },
+        };
 
-        const promise = axios.get(`${API_URL}/trending`)
+        const promise = axios.get(`${API_URL}/trending`, config)
         promise.then(res => {
             setHashtags(res.data)
+            console.log(res.data)
         });
         promise.catch(err => {
             navigate('/')
@@ -38,7 +46,7 @@ export default function HashtagsBox() {
                             <HashtagItem 
                             key={index}
                             id={hashtag.id}
-                            name={hashtag.nome} 
+                            name={hashtag.name} 
                             />
                         )) : null
                     }

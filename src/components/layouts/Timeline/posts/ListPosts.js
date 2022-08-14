@@ -13,18 +13,23 @@ import {
 import { useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline } from 'react-ionicons';
+import { useNavigate } from 'react-router-dom';
 
 export default function ListPosts({
   idPost,
   name,
+  idUser,
   conteudo,
   picture,
   url,
   urlTitle,
   urlImage,
   urlDescription,
+  likes,
+  likedBy,
 }) {
   const [like, setLike] = useState(false);
+  const navigate = useNavigate();
   return (
     <ContainerPost id={idPost}>
       <Title>
@@ -47,10 +52,18 @@ export default function ListPosts({
               onClick={() => setLike(!like)}
             />
           )}
-          <span>13 likes</span>
+            <span>{likes} likes</span>
         </Actions>
         <UserTitle>
-          <h2>{name}</h2>
+          <h2
+            onClick={() =>
+              navigate(`/user/${idUser}`, {
+                state: { id: idUser, name, picture },
+              })
+            }
+          >
+            {name}
+          </h2>
           <p>{conteudo}</p>
         </UserTitle>
       </Title>
