@@ -1,10 +1,8 @@
 import {
   ContainerPost,
   ContainerContents,
-  Title,
   Actions,
   PostProfilePicture,
-  BarraInvisivel,
   BoxContents,
   UserTitle,
   Box,
@@ -15,6 +13,7 @@ import { Heart } from 'react-ionicons';
 import { HeartOutline } from 'react-ionicons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 export default function ListPosts({
   idPost,
@@ -62,28 +61,35 @@ export default function ListPosts({
   const navigate = useNavigate();
   return (
     <ContainerPost id={idPost}>
-      <Title>
-        <Actions>
-          <PostProfilePicture src={picture} alt="profile" />
-          {like ? (
-            <Heart
-              color="#AC0000"
-              width="70px"
-              height="30px"
-              style={{ cursor: 'pointer' }}
-              onClick={likePost}
-            />
-          ) : (
-            <HeartOutline
-              color="white"
-              width="70px"
-              height="30px"
-              style={{ cursor: 'pointer' }}
-              onClick={() => setLike(!like)}
-            />
-          )}
-          <span>{likes} likes</span>
-        </Actions>
+      <Actions>
+        <PostProfilePicture src={picture} alt="profile" />
+        {like ? (
+          <Heart
+            color="#AC0000"
+            width="70px"
+            height="30px"
+            style={{ cursor: 'pointer' }}
+            onClick={likePost}
+          />
+        ) : (
+          <HeartOutline
+            color="white"
+            width="70px"
+            height="30px"
+            style={{ cursor: 'pointer' }}
+            onClick={() => setLike(!like)}
+          />
+        )}
+        <span data-tip="João, Maria e outras 11 pessoas">{likes} likes</span>
+        <ReactTooltip
+          place="bottom"
+          border="radius"
+          borderColor="rgba(255, 255, 255, 0.9)"
+          backgroundColor="rgba(255, 255, 255, 0.9)"
+          textColor="#505050"
+        />
+      </Actions>
+      <ContainerContents>
         <UserTitle>
           <h2
             onClick={() =>
@@ -96,9 +102,6 @@ export default function ListPosts({
           </h2>
           <p>{conteudo}</p>
         </UserTitle>
-      </Title>
-      <ContainerContents>
-        <BarraInvisivel></BarraInvisivel>
         <BoxContents>
           <Box>
             <h2>{urlTitle}</h2>
