@@ -25,6 +25,7 @@ export default function ListPosts({
   urlTitle,
   urlImage,
   urlDescription,
+  reactToPost,
 }) {
   const [like, setLike] = useState(false);
   const navigate = useNavigate();
@@ -39,7 +40,10 @@ export default function ListPosts({
               width="70px"
               height="30px"
               style={{ cursor: 'pointer' }}
-              onClick={() => setLike(!like)}
+              onClick={() => {
+                setLike(!like);
+                reactToPost(idPost);
+              }}
             />
           ) : (
             <HeartOutline
@@ -47,7 +51,10 @@ export default function ListPosts({
               width="70px"
               height="30px"
               style={{ cursor: 'pointer' }}
-              onClick={() => setLike(!like)}
+              onClick={() => {
+                setLike(!like);
+                reactToPost(idPost);
+              }}
             />
           )}
           <span>13 likes</span>

@@ -12,6 +12,26 @@ export default function Posts({ token, userId }) {
   const [thereArePosts, setThereArePosts] = useState('loading');
   const { updateListPosts } = useContext(UserContext);
 
+  async function reactToPost(postId) {
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token || ''}`,
+      },
+    };
+
+    const body = {
+      postId,
+    };
+
+    try {
+      await axios.post(`${API_URL}/likes`, body, config);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
     let config = {
@@ -68,6 +88,7 @@ export default function Posts({ token, userId }) {
             urlTitle={post.urlTitle}
             urlImage={post.urlImage}
             urlDescription={post.urlDescription}
+            reactToPost={reactToPost}
           />
         ))
       )}
