@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -12,7 +12,6 @@ import { getLocal } from '../../../../utils/localStorageFunctions.js';
 export default function TrendingPosts( { token, trendName } ) {
     const [allPosts, setAllPosts] = useState([]);
     const [thereArePosts, setThereArePosts] = useState('loading');
-    const [trendPosts, setTrendPosts] = useState([]);
     const { updateListPosts, setUsername, setToken, setImage } = useContext(UserContext);
     const dadosUsuario = getLocal('linkrUserdata');
 
