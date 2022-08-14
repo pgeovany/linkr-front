@@ -19,7 +19,7 @@ export default function Posts({ token }) {
         Authorization: `Bearer ${token || ''}`,
       },
     };
-    const promise = axios.get(`${API_URL}posts`, config);
+    const promise = axios.get(`${API_URL}/posts`, config);
     promise
       .then((res) => {
         const Posts = res.data;
@@ -32,7 +32,7 @@ export default function Posts({ token }) {
       .catch((_) => {
         setThereArePosts('warning');
       });
-  }, [token, updateListPosts]);
+  }, [updateListPosts]);
 
   return (
     <>
@@ -59,12 +59,13 @@ export default function Posts({ token }) {
             key={id}
             idPost={post.id}
             name={post.user.name}
-            conteudo={post.conteudo}
+            conteudo={post.content}
             picture={post.user.picture}
             url={post.url}
             urlTitle={post.urlTitle}
             urlImage={post.urlImage}
             urlDescription={post.urlDescription}
+            token={token}
           />
         ))
       )}

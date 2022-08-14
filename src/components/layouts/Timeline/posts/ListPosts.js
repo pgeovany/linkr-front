@@ -38,16 +38,18 @@ export default function ListPosts({
     const body = {
       idPost,
     };
+    console.log(idPost);
     if (like === false) {
       try {
-        await axios.post(`${API_URL}`, body, config);
+        console.log('ENTREIIII');
+        await axios.post(`${API_URL}/likes`, body, config);
         setLike(!like);
       } catch (error) {
         alert('Ocorreu um erro ao tentar dar um like no post');
       }
     } else {
       try {
-        await axios.delete(`${API_URL}`, body, config);
+        await axios.delete(`${API_URL}/likes/${idPost}`, config);
         setLike(!like);
       } catch (error) {
         alert('Ocorreu um erro ao tentar dar um deslike no post');

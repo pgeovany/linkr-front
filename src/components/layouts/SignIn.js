@@ -44,7 +44,7 @@ export default function Signin() {
       alert('Preencha todos os campos');
     }
 
-    const promise = axios.post(`${API_URL}login`, data);
+    const promise = axios.post(`${API_URL}/login`, data);
     promise.then((res) => {
       const { nome, token, foto } = res.data;
       setLocal('linkrUserdata', {
