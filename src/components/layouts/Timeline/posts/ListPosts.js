@@ -15,6 +15,10 @@ import { Heart } from 'react-ionicons';
 import { HeartOutline } from 'react-ionicons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { ReactTagify } from "react-tagify";
+
 
 export default function ListPosts({
   idPost,
@@ -60,7 +64,14 @@ export default function ListPosts({
   }
 
   const navigate = useNavigate();
+  const tagStyle = {
+    color: '#b7b7b7',
+    fontWeight: 700,
+    cursor: 'pointer'
+  };
+
   return (
+
     <ContainerPost id={idPost}>
       <Title>
         <Actions>
@@ -94,22 +105,27 @@ export default function ListPosts({
           >
             {name}
           </h2>
-          <p>{conteudo}</p>
+          <ReactTagify tagStyle={tagStyle} tagClicked={(tag) => navigate(`/hashtag/${tag.replace("#", "")}`)}>
+            <p>{conteudo}</p>
+          </ReactTagify>
         </UserTitle>
       </Title>
       <ContainerContents>
         <BarraInvisivel></BarraInvisivel>
         <BoxContents>
-          <Box>
-            <h2>{urlTitle}</h2>
-            <p>{urlDescription}</p>
-            <a href={url} target="blank">
-              {url}
-            </a>
-          </Box>
+            <Box>
+              <h2>{urlTitle}</h2>
+              <div>
+                <p>{urlDescription}</p>
+              </div>
+              <a href={url} target="blank">
+                {url}
+              </a>
+            </Box>
           <ProfileLink src={urlImage} alt="ProfileLink" />
         </BoxContents>
       </ContainerContents>
     </ContainerPost>
+        
   );
 }
