@@ -8,25 +8,19 @@ const ContainerPost = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   margin-top: 28px;
-  flex-direction: column;
+  display: flex;
   @media (max-width: 900px) {
     border-radius: 0px;
     height: 276px;
   }
 `;
 
-const Title = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
 const Actions = styled.div`
-  height: 100%;
+  min-height: 276px;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   margin-right: 15px;
-
   img {
     margin-bottom: 15px;
   }
@@ -36,14 +30,10 @@ const Actions = styled.div`
   }
 `;
 
-const PostProfilePicture = styled(ProfilePicture)`
-  @media (max-width: 900px) {
-    display: none;
-  }
-`;
+const PostProfilePicture = styled(ProfilePicture)``;
 
 const UserTitle = styled.div`
-  height: 100%;
+  height: 40%;
   width: 100%;
   padding: 0 15px;
   h2 {
@@ -68,14 +58,16 @@ const UserTitle = styled.div`
   }
 `;
 const ContainerContents = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const BoxContents = styled.div`
-  max-width: 503px;
-  max-height: 155px;
+  width: 100%;
+  min-height: 200px;
   box-sizing: border-box;
   border: 1px solid #4d4d4d;
   background: #171717;
@@ -83,50 +75,65 @@ const BoxContents = styled.div`
   display: flex;
   justify-content: space-between;
   font-family: 'Lato';
+  @media (max-width: 900px) {
+    min-height: 150px;
+  }
 `;
-const BarraInvisivel = styled.div`
-  background-color: white;
-  max-height: 155px;
-  max-width: 200px;
-`;
+
 const Box = styled.div`
-  padding: 15px 15px;
+  width: 100%;
+  padding: 15px 10px;
   box-sizing: border-box;
   h2 {
+    width: 100%;
     color: white;
     font-weight: 400;
     font-size: 16px;
     color: #cecece;
     margin-bottom: 10px;
+    flex-wrap: wrap;
   }
   p {
+    width: 100%;
     color: white;
     font-weight: 400;
     font-size: 12px;
     color: #9b9595;
     margin-bottom: 10px;
+    flex-wrap: wrap;
   }
   a {
+    width: 100%;
+    flex-wrap: wrap;
     text-decoration: none;
     color: white;
+  }
+  @media (max-width: 900px) {
+    max-width: 115px;
+    max-height: 115px;
+    h2,
+    p,
+    a {
+      width: 40%;
+      font-size: 12px;
+      flex-wrap: wrap;
+    }
   }
 `;
 
 const ProfileLink = styled.img`
-  max-width: 153.44px;
-  max-height: 153px;
+  width: 20%;
+  height: 100%;
   border-radius: 0px 12px 13px 0px;
 `;
 
 export {
   ContainerPost,
-  Title,
   Actions,
   PostProfilePicture,
   UserTitle,
   ContainerContents,
   BoxContents,
-  BarraInvisivel,
   Box,
   ProfileLink,
 };
