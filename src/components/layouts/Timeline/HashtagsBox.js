@@ -12,7 +12,7 @@ function HashtagItem({ id, name }) {
 
 export default function HashtagsBox() {
     const [hashtags, setHashtags] = useState([]);
-    const { token } = useContext(UserContext);
+    const { token, updateListPosts } = useContext(UserContext);
     const API_URL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ export default function HashtagsBox() {
         promise.catch(err => {
             navigate('/')
         })
-    },[])
+    },[updateListPosts])
 
     
     return (
