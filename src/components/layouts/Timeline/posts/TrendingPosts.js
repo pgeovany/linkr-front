@@ -13,7 +13,7 @@ export default function TrendingPosts( { token, trendName } ) {
     const [allPosts, setAllPosts] = useState([]);
     const [thereArePosts, setThereArePosts] = useState('loading');
     const [trendPosts, setTrendPosts] = useState([]);
-    const { updateListPosts, image, setUsername, setToken, setImage } = useContext(UserContext);
+    const { updateListPosts, userId, setUsername, setToken, setImage } = useContext(UserContext);
     const dadosUsuario = getLocal('linkrUserdata');
 
     const navigate = useNavigate();
@@ -32,10 +32,13 @@ export default function TrendingPosts( { token, trendName } ) {
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
-      headers: {
-        Authorization: `Bearer ${token || ''}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token || ''}`,
+            params: userId,
+        },
+         
     };
+    console.log(userId)
     const promise = axios.get(`${API_URL}/trending/${trendName}`, config);
     promise
       .then((res) => {
