@@ -13,6 +13,7 @@ import {
 import { useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline } from 'react-ionicons';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function ListPosts({
@@ -25,10 +26,39 @@ export default function ListPosts({
   urlTitle,
   urlImage,
   urlDescription,
+  token,
   likes,
   likedBy,
 }) {
   const [like, setLike] = useState(false);
+
+  async function likePost() {
+    const API_URL = process.env.REACT_APP_API_URL;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token || ''}`,
+      },
+    };
+    const body = {
+      idPost,
+    };
+    if (like === false) {
+      try {
+        await axios.post(`${API_URL}/likes`, body, config);
+        setLike(!like);
+      } catch (error) {
+        alert('Ocorreu um erro ao tentar dar um like no post');
+      }
+    } else {
+      try {
+        await axios.delete(`${API_URL}/likes/${idPost}`, config);
+        setLike(!like);
+      } catch (error) {
+        alert('Ocorreu um erro ao tentar dar um deslike no post');
+      }
+    }
+  }
+
   const navigate = useNavigate();
   return (
     <ContainerPost id={idPost}>
@@ -41,7 +71,7 @@ export default function ListPosts({
               width="70px"
               height="30px"
               style={{ cursor: 'pointer' }}
-              onClick={() => setLike(!like)}
+              onClick={likePost}
             />
           ) : (
             <HeartOutline
@@ -52,7 +82,7 @@ export default function ListPosts({
               onClick={() => setLike(!like)}
             />
           )}
-            <span>{likes} likes</span>
+          <span>{likes} likes</span>
         </Actions>
         <UserTitle>
           <h2

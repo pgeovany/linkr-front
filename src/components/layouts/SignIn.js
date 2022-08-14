@@ -10,7 +10,7 @@ import '../../assets/fonts.css';
 export default function Signin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
   const [loadingButton, setLoadingButton] = useState(false);
 
   const dadosUsuario = getLocal('linkrUserdata');
@@ -37,10 +37,10 @@ export default function Signin() {
 
     const data = {
       email,
-      password: senha,
+      password,
     };
 
-    if (email === '' || senha === '') {
+    if (email === '' || password === '') {
       alert('Preencha todos os campos');
     }
 
@@ -49,7 +49,7 @@ export default function Signin() {
       const { name, token, image } = res.data;
       setLocal('linkrUserdata', {
         token: token,
-        name, 
+        name,
         image,
       });
       setUsername(name);
@@ -59,6 +59,7 @@ export default function Signin() {
       navigate('/timeline');
     });
     promise.catch((err) => {
+      console.log(err);
       if (err.response.status === 401) {
         alert('Usuário ou senha inválidos');
       }
@@ -85,9 +86,9 @@ export default function Signin() {
           <input
             type="password"
             placeholder="password"
-            value={senha}
+            value={password}
             disabled={loadingButton}
-            onChange={(e) => setSenha(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           {loadingButton ? (
             <button disabled={loadingButton}>
