@@ -37,11 +37,7 @@ export default function Signin() {
 
     const data = {
       email,
-<<<<<<< HEAD
       password,
-=======
-      password: senha,
->>>>>>> 190216b353121328f6f7deb5328ee78c94c4fae5
     };
 
     if (email === '' || password === '') {
@@ -53,7 +49,7 @@ export default function Signin() {
       const { name, token, image } = res.data;
       setLocal('linkrUserdata', {
         token: token,
-        name, 
+        name,
         image,
       });
       setUsername(name);
