@@ -49,7 +49,7 @@ export default function Signin() {
       const { name, token, image } = res.data;
       setLocal('linkrUserdata', {
         token: token,
-        name,
+        name, 
         image,
       });
       setUsername(name);

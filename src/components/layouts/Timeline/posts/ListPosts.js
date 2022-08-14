@@ -25,6 +25,8 @@ export default function ListPosts({
   urlTitle,
   urlImage,
   urlDescription,
+  likes,
+  likedBy,
 }) {
   const [like, setLike] = useState(false);
   const navigate = useNavigate();
@@ -50,7 +52,7 @@ export default function ListPosts({
               onClick={() => setLike(!like)}
             />
           )}
-          <span>13 likes</span>
+            <span>{likes} likes</span>
         </Actions>
         <UserTitle>
           <h2

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../Navbar/Navbar';
 import NewPostForm from './NewPostForm';
+import HashtagsBox from './HashtagsBox';
 import UserContext from '../../../context/UserContext';
 import Posts from './posts/Posts';
 
@@ -44,6 +45,7 @@ export default function Timeline() {
           <NewPostForm image={image} token={token} />
           <Posts token={token} />
         </Feed>
+        <HashtagsBox />
       </TimelineContainer>
     </>
   );

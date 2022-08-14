@@ -28,7 +28,7 @@ export default function SignUp() {
     console.log(dadosCadastrados);
 
     if ((email || password || username || pictureUrl) !== null) {
-      const URL = 'http://localhost:5000/logup';
+      const URL = `${process.env.REACT_APP_API_URL}/logup`;
       const promise = axios.post(URL, dadosCadastrados);
       promise
         .then((_) => {

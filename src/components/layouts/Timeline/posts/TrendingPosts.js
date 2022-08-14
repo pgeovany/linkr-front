@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -6,22 +7,36 @@ import { Sad } from 'react-ionicons';
 import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
+import { setLocal, getLocal } from '../../../../utils/localStorageFunctions.js';
 
-export default function Posts({ token, userId }) {
-  const [allPosts, setAllPosts] = useState([]);
-  const [thereArePosts, setThereArePosts] = useState('loading');
-  const { updateListPosts } = useContext(UserContext);
+export default function TrendingPosts( { token, trendName } ) {
+    const [allPosts, setAllPosts] = useState([]);
+    const [thereArePosts, setThereArePosts] = useState('loading');
+    const [trendPosts, setTrendPosts] = useState([]);
+    const { updateListPosts, image, setUsername, setToken, setImage } = useContext(UserContext);
+    const dadosUsuario = getLocal('linkrUserdata');
+
+    const navigate = useNavigate();
+    console.log(allPosts, thereArePosts)
+
+    function AtualizaUsuario(){
+    if(dadosUsuario){
+        setUsername(dadosUsuario.name);
+        setToken(dadosUsuario.token);
+        setImage(dadosUsuario.image);
+    } else {
+        navigate('/');
+    }
+}
 
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
-    let config = {
+    const config = {
       headers: {
         Authorization: `Bearer ${token || ''}`,
       },
-      params: { id: userId },
     };
-
-    const promise = axios.get(`${API_URL}/posts`, config);
+    const promise = axios.get(`${API_URL}/trending/${trendName}`, config);
     promise
       .then((res) => {
         const Posts = res.data;
@@ -30,11 +45,14 @@ export default function Posts({ token, userId }) {
         }
         setThereArePosts('loaded');
         setAllPosts(Posts);
+        console.log(Posts)
+        AtualizaUsuario();
       })
       .catch((_) => {
         setThereArePosts('warning');
       });
-  }, [token, updateListPosts, userId]); // eslint-disable-line
+  }, [token, updateListPosts, trendName]);
+
 
   return (
     <>
@@ -62,7 +80,7 @@ export default function Posts({ token, userId }) {
             idPost={post.id}
             name={post.user.name}
             idUser={post.user.id}
-            conteudo={post.content}
+            conteudo={post.conteudo}
             picture={post.user.picture}
             url={post.url}
             urlTitle={post.urlTitle}
@@ -75,6 +93,7 @@ export default function Posts({ token, userId }) {
       )}
     </>
   );
+
 }
 
 const Spiner = styled.div`
