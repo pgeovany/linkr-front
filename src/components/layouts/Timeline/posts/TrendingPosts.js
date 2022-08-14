@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -7,15 +7,13 @@ import { Sad } from 'react-ionicons';
 import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
-import { setLocal, getLocal } from '../../../../utils/localStorageFunctions.js';
+import { getLocal } from '../../../../utils/localStorageFunctions.js';
 
-export default function TrendingPosts({ token, trendName }) {
-  const [allPosts, setAllPosts] = useState([]);
-  const [thereArePosts, setThereArePosts] = useState('loading');
-  const [trendPosts, setTrendPosts] = useState([]);
-  const { updateListPosts, image, setUsername, setToken, setImage } =
-    useContext(UserContext);
-  const dadosUsuario = getLocal('linkrUserdata');
+export default function TrendingPosts( { token, trendName } ) {
+    const [allPosts, setAllPosts] = useState([]);
+    const [thereArePosts, setThereArePosts] = useState('loading');
+    const { updateListPosts, setUsername, setToken, setImage } = useContext(UserContext);
+    const dadosUsuario = getLocal('linkrUserdata');
 
   const navigate = useNavigate();
   console.log(allPosts, thereArePosts);
@@ -33,9 +31,9 @@ export default function TrendingPosts({ token, trendName }) {
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
-      headers: {
-        Authorization: `Bearer ${token || ''}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token || ''}`,
+        },
     };
     const promise = axios.get(`${API_URL}/trending/${trendName}`, config);
     promise
