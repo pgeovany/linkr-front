@@ -100,7 +100,7 @@ export default function Navbar({
           handleMenusRendering();
         }}
       >
-        <Logo>linkr</Logo>
+        <Logo onClick={() => navigate('/timeline')}>linkr</Logo>
         <SearchBarContainer>
           <Input
             placeholder="Search for people"
@@ -167,6 +167,10 @@ const Logo = styled.div`
   font-weight: bold;
   font-size: 50px;
   color: white;
+
+  &&:hover {
+    cursor: pointer;
+  }
 `;
 
 const UserMenu = styled.div`
