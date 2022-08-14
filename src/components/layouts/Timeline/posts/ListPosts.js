@@ -58,7 +58,7 @@ export default function ListPosts({
           <h2
             onClick={() =>
               navigate(`/user/${idUser}`, {
-                state: { id: idUser, name, picture },
+                state: { id: idUser, name, image: picture },
               })
             }
           >

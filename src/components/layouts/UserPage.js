@@ -45,7 +45,7 @@ export default function UserPage() {
             <ProfilePicture src={userInfo ? userInfo.image : ''} alt="" />
             <FeedTitle>{`${userInfo.name}'s posts`}</FeedTitle>
           </Header>
-          <Posts token={token} />
+          <Posts token={token} userId={userInfo.id} />
         </Feed>
       </TimelineContainer>
     </>
