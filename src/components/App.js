@@ -7,11 +7,11 @@ import SignUp from './layouts/SignUp';
 import Trend from './layouts/Timeline/Trend';
 import UserPage from './layouts/UserPage';
 
-
 export default function App() {
   const [username, setUsername] = useState(null);
   const [image, setImage] = useState(null);
   const [token, setToken] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [updateListPosts, setUpdateListPosts] = useState(0);
 
   return (
@@ -24,6 +24,8 @@ export default function App() {
           setImage,
           token,
           setToken,
+          userId,
+          setUserId,
           setUpdateListPosts,
           updateListPosts,
         }}

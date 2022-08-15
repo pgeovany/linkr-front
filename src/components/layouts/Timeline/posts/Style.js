@@ -57,6 +57,16 @@ const UserTitle = styled.div`
     flex-wrap: wrap;
   }
 `;
+const Header = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+const Title = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const ContainerContents = styled.div`
   display: flex;
   width: 100%;
@@ -67,7 +77,7 @@ const ContainerContents = styled.div`
 
 const BoxContents = styled.div`
   width: 100%;
-  min-height: 200px;
+  min-height: 160px;
   box-sizing: border-box;
   border: 1px solid #4d4d4d;
   background: #171717;
@@ -132,6 +142,8 @@ export {
   Actions,
   PostProfilePicture,
   UserTitle,
+  Header,
+  Title,
   ContainerContents,
   BoxContents,
   Box,

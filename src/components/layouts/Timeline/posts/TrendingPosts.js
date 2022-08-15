@@ -9,14 +9,14 @@ import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
 import { getLocal } from '../../../../utils/localStorageFunctions.js';
 
-export default function TrendingPosts( { token, trendName } ) {
-    const [allPosts, setAllPosts] = useState([]);
-    const [thereArePosts, setThereArePosts] = useState('loading');
-    const { updateListPosts, setUsername, setToken, setImage } = useContext(UserContext);
-    const dadosUsuario = getLocal('linkrUserdata');
+export default function TrendingPosts({ token, trendName, userId }) {
+  const [allPosts, setAllPosts] = useState([]);
+  const [thereArePosts, setThereArePosts] = useState('loading');
+  const { updateListPosts, setUsername, setToken, setImage } =
+    useContext(UserContext);
+  const dadosUsuario = getLocal('linkrUserdata');
 
   const navigate = useNavigate();
-  console.log(allPosts, thereArePosts);
 
   function AtualizaUsuario() {
     if (dadosUsuario) {
@@ -31,9 +31,9 @@ export default function TrendingPosts( { token, trendName } ) {
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
-        headers: {
-            Authorization: `Bearer ${token || ''}`,
-        },
+      headers: {
+        Authorization: `Bearer ${token || ''}`,
+      },
     };
     const promise = axios.get(`${API_URL}/trending/${trendName}`, config);
     promise
@@ -44,7 +44,6 @@ export default function TrendingPosts( { token, trendName } ) {
         }
         setThereArePosts('loaded');
         setAllPosts(Posts);
-        console.log(Posts);
         AtualizaUsuario();
       })
       .catch((_) => {
@@ -77,15 +76,18 @@ export default function TrendingPosts( { token, trendName } ) {
             key={id}
             idPost={post.id}
             name={post.user.name}
-            idUser={post.user.id}
+            postUser={post.user.id}
+            userId={userId}
             conteudo={post.content}
             picture={post.user.picture}
             url={post.url}
             urlTitle={post.urlTitle}
             urlImage={post.urlImage}
             urlDescription={post.urlDescription}
+            token={token}
             likedBy={post.likedBy}
             likes={post.likes}
+            islike={post.is_liked}
           />
         ))
       )}
