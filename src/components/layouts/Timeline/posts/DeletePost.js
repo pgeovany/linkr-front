@@ -3,6 +3,7 @@ import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export default function deletePost(token, idUser, idPost) {
+  console.log(idPost);
   Confirm.show(
     'Do you really confirm?',
     'Are you sure you want to delete this post?',

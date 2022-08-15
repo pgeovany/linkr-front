@@ -73,7 +73,7 @@ const ContainerContents = styled.div`
 
 const BoxContents = styled.div`
   width: 100%;
-  min-height: 200px;
+  min-height: 160px;
   box-sizing: border-box;
   border: 1px solid #4d4d4d;
   background: #171717;
