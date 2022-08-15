@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
 
@@ -8,41 +8,40 @@ import Navbar from '../../layouts/Navbar/Navbar';
 import HashtagsBox from './HashtagsBox';
 import TrendingPosts from './posts/TrendingPosts';
 
+export default function Trend() {
+  const trendName = useParams().hashtag;
+  const { token, image, userId } = useContext(UserContext);
+  const [activeMenu, setActiveMenu] = useState(false);
+  const [renderUserList, setRenderUserList] = useState(false);
 
-export default function Trend(){
-    const trendName = useParams().hashtag;
-    const { token, image } = useContext(UserContext);
-    const [activeMenu, setActiveMenu] = useState(false);
-    const [renderUserList, setRenderUserList] = useState(false);
-
-    return(
-        <>
-            <Navbar
-                token={token}
-                image={image}
-                activeMenu={activeMenu}
-                setActiveMenu={setActiveMenu}
-                renderUserList={renderUserList}
-                setRenderUserList={setRenderUserList}
-            />
-            <TimelineContainer
-                onClick={() => {
-                if (activeMenu) {
-                    setActiveMenu(false);
-                }
-                if (renderUserList) {
-                    setRenderUserList(false);
-                }
-                }}
-            >
-                <Feed>
-                    <FeedTitle># {trendName}</FeedTitle>
-                    <TrendingPosts token={token} trendName={trendName} />             
-                </Feed>
-                <HashtagsBox />
-            </TimelineContainer>
-        </>  
-    )
+  return (
+    <>
+      <Navbar
+        token={token}
+        image={image}
+        activeMenu={activeMenu}
+        setActiveMenu={setActiveMenu}
+        renderUserList={renderUserList}
+        setRenderUserList={setRenderUserList}
+      />
+      <TimelineContainer
+        onClick={() => {
+          if (activeMenu) {
+            setActiveMenu(false);
+          }
+          if (renderUserList) {
+            setRenderUserList(false);
+          }
+        }}
+      >
+        <Feed>
+          <FeedTitle># {trendName}</FeedTitle>
+          <TrendingPosts token={token} trendName={trendName} userId={userId} />
+        </Feed>
+        <HashtagsBox />
+      </TimelineContainer>
+    </>
+  );
 }
 
 const TimelineContainer = styled.div`

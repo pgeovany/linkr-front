@@ -7,7 +7,7 @@ import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
 
-export default function Posts({ token, userId }) {
+export default function Posts({ token, idUser, userId }) {
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
   const { updateListPosts } = useContext(UserContext);
@@ -18,7 +18,7 @@ export default function Posts({ token, userId }) {
       headers: {
         Authorization: `Bearer ${token || ''}`,
       },
-      params: { id: userId },
+      params: { id: idUser },
     };
 
     const promise = axios.get(`${API_URL}/posts`, config);
@@ -31,7 +31,7 @@ export default function Posts({ token, userId }) {
         setThereArePosts('loaded');
         setAllPosts(Posts);
       })
-      .catch((_) => {
+      .catch((err) => {
         setThereArePosts('warning');
       });
   }, [updateListPosts, userId]); // eslint-disable-line
@@ -61,7 +61,8 @@ export default function Posts({ token, userId }) {
             key={id}
             idPost={post.id}
             name={post.user.name}
-            idUser={post.user.id}
+            postUser={post.user.id}
+            userId={userId}
             conteudo={post.content}
             picture={post.user.picture}
             url={post.url}
@@ -71,6 +72,7 @@ export default function Posts({ token, userId }) {
             token={token}
             likedBy={post.likedBy}
             likes={post.likes}
+            islike={post.is_liked}
           />
         ))
       )}

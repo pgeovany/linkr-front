@@ -2,8 +2,12 @@ import axios from 'axios';
 import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-export default function deletePost(token, idUser, idPost) {
-  console.log(idPost);
+export default function deletePost(
+  token,
+  idPost,
+  setUpdateListPosts,
+  updateListPosts
+) {
   Confirm.show(
     'Do you really confirm?',
     'Are you sure you want to delete this post?',
@@ -17,8 +21,8 @@ export default function deletePost(token, idUser, idPost) {
             Authorization: `Bearer ${token || ''}`,
           },
         };
-        console.log('Entrei');
-        //await axios.delete(`${API_URL}/likes/${idPost}`, config);
+        await axios.delete(`${API_URL}/posts/${idPost}`, config);
+        setUpdateListPosts(updateListPosts + 1);
       } catch (error) {
         Notify.failure('Não foi possível excluir o post');
       }

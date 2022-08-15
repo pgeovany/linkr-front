@@ -5,25 +5,27 @@ import {
   PostProfilePicture,
   BoxContents,
   UserTitle,
-  NameUser,
+  Header,
   Box,
   ProfileLink,
+  Title,
 } from './Style.js';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline, Trash, Create } from 'react-ionicons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { ReactTagify } from 'react-tagify';
 import ReactTooltip from 'react-tooltip';
 import deletePost from './DeletePost.js';
+import UserContext from '../../../../context/UserContext.js';
 
 export default function ListPosts({
   idPost,
   name,
-  idUser,
+  postUser,
+  userId,
   conteudo,
   picture,
   url,
@@ -33,11 +35,13 @@ export default function ListPosts({
   token,
   likes,
   likedBy,
+  islike,
 }) {
   const [like, setLike] = useState(false);
-  const userLikePost = idUser === idPost;
+  const userLikePost = postUser === islike;
   const peopleLiked = likedBy.length;
-
+  const postByUser = postUser === userId;
+  const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
   async function likePost() {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
@@ -52,6 +56,7 @@ export default function ListPosts({
       try {
         await axios.post(`${API_URL}/likes`, body, config);
         setLike(!like);
+        setUpdateListPosts(updateListPosts + 1);
       } catch (error) {
         alert('Ocorreu um erro ao tentar dar um like no post');
       }
@@ -59,6 +64,7 @@ export default function ListPosts({
       try {
         await axios.delete(`${API_URL}/likes/${idPost}`, config);
         setLike(!like);
+        setUpdateListPosts(updateListPosts - 1);
       } catch (error) {
         alert('Ocorreu um erro ao tentar dar um deslike no post');
       }
@@ -77,12 +83,7 @@ export default function ListPosts({
       <Actions>
         <PostProfilePicture src={picture} alt="profile" />
         {userLikePost ? (
-          <Heart
-            color="#AC0000"
-            width="70px"
-            height="30px"
-            style={{ cursor: 'pointer' }}
-          />
+          <Heart color="#AC0000" width="70px" height="30px" />
         ) : like ? (
           <Heart
             color="#AC0000"
@@ -108,6 +109,8 @@ export default function ListPosts({
               ? `Você,${likedBy[0]} e outras ${
                   peopleLiked - 2
                 } pessoas curtiram`
+              : peopleLiked === 1 && userLikePost
+              ? 'Você curtiu esse post'
               : `${likedBy[0]},${likedBy[1]} e outras ${
                   peopleLiked - 2
                 } pessoas curtiram`
@@ -124,17 +127,27 @@ export default function ListPosts({
       </Actions>
       <ContainerContents>
         <UserTitle>
-          <NameUser>
-            <h2
-              onClick={() =>
-                navigate(`/user/${idUser}`, {
-                  state: { id: idUser, name, image: picture },
-                })
-              }
-            >
-              {name}
-            </h2>
-            {userLikePost ? (
+          <Header>
+            <Title>
+              <h2
+                onClick={() =>
+                  navigate(`/user/${postUser}`, {
+                    state: { id: postUser, name, image: picture },
+                  })
+                }
+              >
+                {name}
+              </h2>
+              <ReactTagify
+                tagStyle={tagStyle}
+                tagClicked={(tag) =>
+                  navigate(`/hashtag/${tag.replace('#', '')}`)
+                }
+              >
+                <p>{conteudo}</p>
+              </ReactTagify>
+            </Title>
+            {postByUser ? (
               <div>
                 <Create
                   color="white"
@@ -143,29 +156,20 @@ export default function ListPosts({
                 <Trash
                   color="white"
                   style={{ cursor: 'pointer' }}
-                  onClick={() => deletePost(token, idUser, idPost)}
+                  onClick={() =>
+                    deletePost(
+                      token,
+                      idPost,
+                      setUpdateListPosts,
+                      updateListPosts
+                    )
+                  }
                 />
               </div>
             ) : (
               ''
             )}
-          </NameUser>
-          <p>{conteudo}</p>
-          <h2
-            onClick={() =>
-              navigate(`/user/${idUser}`, {
-                state: { id: idUser, name, image: picture },
-              })
-            }
-          >
-            {name}
-          </h2>
-          <ReactTagify
-            tagStyle={tagStyle}
-            tagClicked={(tag) => navigate(`/hashtag/${tag.replace('#', '')}`)}
-          >
-            <p>{conteudo}</p>
-          </ReactTagify>
+          </Header>
         </UserTitle>
         <BoxContents>
           <Box>

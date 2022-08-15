@@ -11,6 +11,7 @@ export default function Timeline() {
   const navigate = useNavigate();
   const { token } = useContext(UserContext);
   const { image } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
   const [activeMenu, setActiveMenu] = useState(false);
   const [renderUserList, setRenderUserList] = useState(false);
 
@@ -43,7 +44,7 @@ export default function Timeline() {
         <Feed>
           <FeedTitle>timeline</FeedTitle>
           <NewPostForm image={image} token={token} />
-          <Posts token={token} />
+          <Posts token={token} userId={userId} />
         </Feed>
         <HashtagsBox />
       </TimelineContainer>

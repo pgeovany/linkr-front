@@ -12,6 +12,7 @@ export default function UserPage() {
   const { state: userInfo } = useLocation();
   const { token } = useContext(UserContext);
   const { image } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
   const [activeMenu, setActiveMenu] = useState(false);
   const [renderUserList, setRenderUserList] = useState(false);
 
@@ -46,7 +47,7 @@ export default function UserPage() {
             <ProfilePicture src={userInfo ? userInfo.image : ''} alt="" />
             <FeedTitle>{`${userInfo.name}'s posts`}</FeedTitle>
           </Header>
-          <Posts token={token} userId={userInfo.id} />
+          <Posts token={token} idUser={userInfo.id} userId={userId} />
         </Feed>
         <HashtagsBox />
       </TimelineContainer>
