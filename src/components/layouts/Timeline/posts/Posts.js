@@ -28,6 +28,7 @@ export default function Posts({ token, idUser, userId }) {
         if (Posts.length === 0) {
           return setThereArePosts('empty');
         }
+        console.log(Posts);
         setThereArePosts('loaded');
         setAllPosts(Posts);
       })
