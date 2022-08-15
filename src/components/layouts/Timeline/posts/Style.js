@@ -57,6 +57,12 @@ const UserTitle = styled.div`
     flex-wrap: wrap;
   }
 `;
+const NameUser = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
 const ContainerContents = styled.div`
   display: flex;
   width: 100%;
@@ -132,6 +138,7 @@ export {
   Actions,
   PostProfilePicture,
   UserTitle,
+  NameUser,
   ContainerContents,
   BoxContents,
   Box,

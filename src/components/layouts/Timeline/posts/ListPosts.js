@@ -5,15 +5,17 @@ import {
   PostProfilePicture,
   BoxContents,
   UserTitle,
+  NameUser,
   Box,
   ProfileLink,
 } from './Style.js';
 import { useState } from 'react';
 import { Heart } from 'react-ionicons';
-import { HeartOutline } from 'react-ionicons';
+import { HeartOutline, Trash, Create } from 'react-ionicons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
+import deletePost from './DeletePost.js';
 
 export default function ListPosts({
   idPost,
@@ -30,6 +32,8 @@ export default function ListPosts({
   likedBy,
 }) {
   const [like, setLike] = useState(false);
+  const userLikePost = idUser === idPost;
+  const peopleLiked = likedBy.length;
 
   async function likePost() {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -63,7 +67,14 @@ export default function ListPosts({
     <ContainerPost id={idPost}>
       <Actions>
         <PostProfilePicture src={picture} alt="profile" />
-        {like ? (
+        {userLikePost ? (
+          <Heart
+            color="#AC0000"
+            width="70px"
+            height="30px"
+            style={{ cursor: 'pointer' }}
+          />
+        ) : like ? (
           <Heart
             color="#AC0000"
             width="70px"
@@ -77,13 +88,26 @@ export default function ListPosts({
             width="70px"
             height="30px"
             style={{ cursor: 'pointer' }}
-            onClick={() => setLike(!like)}
+            onClick={likePost}
           />
         )}
-        <span data-tip="João, Maria e outras 11 pessoas">{likes} likes</span>
+        <span
+          data-tip={
+            peopleLiked === 0
+              ? ''
+              : userLikePost
+              ? `Você,${likedBy[0]} e outras ${
+                  peopleLiked - 2
+                } pessoas curtiram`
+              : `${likedBy[0]},${likedBy[1]} e outras ${
+                  peopleLiked - 2
+                } pessoas curtiram`
+          }
+        >
+          {likes} likes
+        </span>
         <ReactTooltip
           place="bottom"
-          border="radius"
           borderColor="rgba(255, 255, 255, 0.9)"
           backgroundColor="rgba(255, 255, 255, 0.9)"
           textColor="#505050"
@@ -91,15 +115,32 @@ export default function ListPosts({
       </Actions>
       <ContainerContents>
         <UserTitle>
-          <h2
-            onClick={() =>
-              navigate(`/user/${idUser}`, {
-                state: { id: idUser, name, image: picture },
-              })
-            }
-          >
-            {name}
-          </h2>
+          <NameUser>
+            <h2
+              onClick={() =>
+                navigate(`/user/${idUser}`, {
+                  state: { id: idUser, name, image: picture },
+                })
+              }
+            >
+              {name}
+            </h2>
+            {userLikePost ? (
+              <div>
+                <Create
+                  color="white"
+                  style={{ cursor: 'pointer', marginRight: '10px' }}
+                />
+                <Trash
+                  color="white"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => deletePost(token, idUser, idPost)}
+                />
+              </div>
+            ) : (
+              ''
+            )}
+          </NameUser>
           <p>{conteudo}</p>
         </UserTitle>
         <BoxContents>
