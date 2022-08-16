@@ -28,7 +28,6 @@ export default function Posts({ token, idUser, userId }) {
         if (Posts.length === 0) {
           return setThereArePosts('empty');
         }
-        console.log(Posts);
         setThereArePosts('loaded');
         setAllPosts(Posts);
       })
@@ -75,7 +74,7 @@ export default function Posts({ token, idUser, userId }) {
             token={token}
             likedBy={post.likedBy}
             likes={post.likes}
-            islike={post.is_liked}
+            isLikedByCurrentUser={post.is_liked}
           />
         ))
       )}
