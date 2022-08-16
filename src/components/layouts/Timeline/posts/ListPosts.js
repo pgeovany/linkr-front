@@ -38,18 +38,30 @@ export default function ListPosts({
   likedBy,
   isLikedByCurrentUser,
 }) {
+  const navigate = useNavigate();
+
   const [editing, setEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const [sanitizedContent, setSanitizedContent] = useState('');
+
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
-  const navigate = useNavigate();
   const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
+
   const tagStyle = {
     color: '#b7b7b7',
     fontWeight: 700,
     cursor: 'pointer',
   };
+
+  useEffect(() => {
+    if (conteudo) {
+      const newSanitizedContent = conteudo.replace(/[^a-zA-Z0-9(_#)]/g, ' ');
+      setSanitizedContent(newSanitizedContent);
+    }
+  }, [conteudo]);
 
   useEffect(() => {
     ReactTooltip.rebuild();
@@ -63,9 +75,7 @@ export default function ListPosts({
         return `Você curtiu esse post`;
       }
       if (peopleLiked === 2) {
-        return `Você e ${likedBy.find(
-          (user) => user.id !== userId
-        )} curtiram esse post`;
+        return `Você e ${likedBy[0]} curtiram esse post`;
       }
       if (peopleLiked >= 3) {
         return `Você, ${likedBy[0]} e outras ${
@@ -134,14 +144,16 @@ export default function ListPosts({
     }
   }
 
+  function HandleTag(tag) {
+    const tagName = tag.replace(/[^a-zA-Z0-9(_)]/g, '');
+    navigate(`/hashtag/${tagName}`);
+  }
+
   function renderContent() {
-    if (conteudo && !editing) {
+    if (sanitizedContent && !editing) {
       return (
-        <ReactTagify
-          tagStyle={tagStyle}
-          tagClicked={(tag) => navigate(`/hashtag/${tag.replace('#', '')}`)}
-        >
-          <p>{conteudo}</p>
+        <ReactTagify tagStyle={tagStyle} tagClicked={(tag) => HandleTag(tag)}>
+          <p>{sanitizedContent}</p>
         </ReactTagify>
       );
     }
