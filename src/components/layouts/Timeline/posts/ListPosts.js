@@ -38,6 +38,7 @@ export default function ListPosts({
   islike,
 }) {
   const [like, setLike] = useState(false);
+  const [sanitizedContent, setSanitizedContent] = useState('');
   const [editContent, setEditContent] = useState(false);
 
   useEffect(() => {
@@ -45,6 +46,11 @@ export default function ListPosts({
       setLike(true);
     }
   }, []);
+
+  useEffect(() => {
+      const filteredContent = conteudo.replace(/[^a-zA-Z0-9(_#)]/g, " ");
+      setSanitizedContent(filteredContent);
+  }, [])
 
   const userLikePost = postUser === islike;
   const peopleLiked = likedBy.length;
@@ -116,6 +122,12 @@ export default function ListPosts({
     cursor: 'pointer',
   };
 
+  function HandleTag(tag) {
+    const tagName = tag.replace(/[^a-zA-Z0-9(_)]/g, "");
+    console.log(tagName);
+    navigate(`/hashtag/${tagName}`)
+  }
+
   return (
     <ContainerPost id={idPost}>
       <Actions>
@@ -167,14 +179,12 @@ export default function ListPosts({
                 {name}
               </h2>
 
-              {conteudo ? (
+              {sanitizedContent ? (
                 <ReactTagify
                   tagStyle={tagStyle}
-                  tagClicked={(tag) =>
-                    navigate(`/hashtag/${tag.replace('#', '')}`)
-                  }
+                  tagClicked={(tag) => HandleTag(tag)}
                 >
-                  <p>{conteudo}</p>
+                  <p>{sanitizedContent}</p>
                 </ReactTagify>
               ) : null}
             </Title>

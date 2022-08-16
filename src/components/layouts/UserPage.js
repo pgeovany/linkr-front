@@ -6,6 +6,7 @@ import Navbar from './Navbar/Navbar';
 import UserContext from '../../context/UserContext';
 import Posts from './Timeline/posts/Posts';
 import HashtagsBox from './Timeline/HashtagsBox';
+import { deleteLocal } from '../../utils/localStorageFunctions';
 
 export default function UserPage() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function UserPage() {
 
   useEffect(() => {
     if (!token) {
+      deleteLocal('linkrUserdata');
       navigate('/');
     }
   }, []); // eslint-disable-line

@@ -37,6 +37,8 @@ export default function Posts({ token, idUser, userId }) {
       });
   }, [updateListPosts, userId]); // eslint-disable-line
 
+
+
   return (
     <>
       {thereArePosts === 'loading' ? (
