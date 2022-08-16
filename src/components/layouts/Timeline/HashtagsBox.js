@@ -74,7 +74,7 @@ const HashtagsBoxArea = styled.aside`
 const HashtagsBoxContainer = styled.div`
   background-color: #171717;
   width: 301px;
-  height: 406px;
+  height: 446px;
   border-radius: 16px;
   position: fixed;
   top: 240px;

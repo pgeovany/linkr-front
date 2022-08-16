@@ -49,9 +49,11 @@ export default function ListPosts({
   // }, []);
 
   useEffect(() => {
-      const filteredContent = conteudo.replace(/[^a-zA-Z0-9(_#)]/g, " ");
-      setSanitizedContent(filteredContent);
-  }, [])
+    if(conteudo) {
+      const newSanitizedContent = conteudo.replace(/[^a-zA-Z0-9(_#)]/g, " ");
+      setSanitizedContent(newSanitizedContent);
+    }      
+  }, [conteudo])
 
   // const userLikePost = postUser === islike;
 
@@ -163,7 +165,6 @@ export default function ListPosts({
 
   function HandleTag(tag) {
     const tagName = tag.replace(/[^a-zA-Z0-9(_)]/g, "");
-    console.log(tagName);
     navigate(`/hashtag/${tagName}`)
   }
 
