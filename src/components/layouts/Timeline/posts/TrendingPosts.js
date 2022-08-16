@@ -49,7 +49,7 @@ export default function TrendingPosts({ token, trendName, userId }) {
       .catch((_) => {
         setThereArePosts('warning');
       });
-  }, [token, updateListPosts, trendName]);
+  }, [token, updateListPosts, trendName]); //eslint-disable-line
 
   return (
     <>
