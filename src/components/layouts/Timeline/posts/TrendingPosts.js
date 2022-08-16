@@ -49,7 +49,7 @@ export default function TrendingPosts({ token, trendName, userId }) {
       .catch((_) => {
         setThereArePosts('warning');
       });
-  }, [token, updateListPosts, trendName]);
+  }, [token, updateListPosts, trendName]); //eslint-disable-line
 
   return (
     <>
@@ -87,7 +87,7 @@ export default function TrendingPosts({ token, trendName, userId }) {
             token={token}
             likedBy={post.likedBy}
             likes={post.likes}
-            islike={post.is_liked}
+            isLikedByCurrentUser={post.is_liked}
           />
         ))
       )}
