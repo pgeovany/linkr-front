@@ -10,7 +10,7 @@ import {
   ProfileLink,
   Title,
 } from './Style.js';
-import { useContext, useRef, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline, Trash, Create } from 'react-ionicons';
 import axios from 'axios';
@@ -35,49 +35,51 @@ export default function ListPosts({
   token,
   likes,
   likedBy,
-  islike,
+  isLikedByCurrentUser,
 }) {
   const [like, setLike] = useState(false);
-  const [editContent, setEditContent] = useState(false);
-
-  useEffect(() => {
-    if (islike === userId) {
-      setLike(true);
-    }
-  }, []);
-
-  const userLikePost = postUser === islike;
+  // const [editContent, setEditContent] = useState(false);
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
   const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
-  const inputRef = useRef();
+  // const inputRef = useRef();
+
+  useEffect(() => {
+    if (isLikedByCurrentUser) {
+      setLike(true);
+    }
+  }, []); //eslint-disable-line
 
   function verificaLikes() {
     if (peopleLiked === 0) {
-      return '';
-    } else if (userLikePost && peopleLiked > 3) {
-      return `Você,${likedBy[0]} e outras ${peopleLiked - 2} pessoas curtiram`;
-    } else if (userLikePost && peopleLiked > 2) {
-      return `Você,${likedBy[0]} e outras ${peopleLiked - 2} pessoas curtiram`;
-    } else if (peopleLiked === 1 && userLikePost) {
-      return 'Você curtiu esse post';
+      return null;
+    } else if (isLikedByCurrentUser) {
+      if (peopleLiked === 1) {
+        return `Você curtiu esse post`;
+      }
+      if (peopleLiked === 2) {
+        return `Você e ${likedBy.find(
+          (user) => user.id !== userId
+        )} curtiram esse post`;
+      }
+      if (peopleLiked >= 3) {
+        return `Você, ${likedBy[0]} e outras ${
+          peopleLiked - 2
+        } pessoas curtiram`;
+      }
     } else {
-      return `${likedBy[0]},${likedBy[1]} e outras ${
-        peopleLiked - 2
-      } pessoas curtiram`;
+      if (peopleLiked === 1) {
+        return `${likedBy[0]} curtiu esse post`;
+      }
+      if (peopleLiked === 2) {
+        return `${likedBy[0]} e ${likedBy[1]} curtiram esse post`;
+      }
+      if (peopleLiked >= 3) {
+        return `${likedBy[0]}, ${likedBy[1]} e outras ${
+          peopleLiked - 2
+        } pessoas curtiram`;
+      }
     }
-
-    // peopleLiked === 0
-    //   ? ''
-    //   : userLikePost
-    //   ? `Você,${likedBy[0]} e outras ${
-    //       peopleLiked - 2
-    //     } pessoas curtiram`
-    //   : peopleLiked === 1 && userLikePost
-    //   ? 'Você curtiu esse post'
-    //   : `${likedBy[0]},${likedBy[1]} e outras ${
-    //       peopleLiked - 2
-    //     } pessoas curtiram`
   }
 
   async function likePost() {
@@ -120,7 +122,7 @@ export default function ListPosts({
     <ContainerPost id={idPost}>
       <Actions>
         <PostProfilePicture src={picture} alt="profile" />
-        {userLikePost ? (
+        {isLikedByCurrentUser ? (
           <Heart
             color="#AC0000"
             width="70px"

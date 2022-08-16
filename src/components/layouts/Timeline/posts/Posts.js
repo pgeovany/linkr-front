@@ -73,7 +73,7 @@ export default function Posts({ token, idUser, userId }) {
             token={token}
             likedBy={post.likedBy}
             likes={post.likes}
-            islike={post.is_liked}
+            isLikedByCurrentUser={post.is_liked}
           />
         ))
       )}
