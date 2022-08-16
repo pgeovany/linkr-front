@@ -40,6 +40,7 @@ export default function ListPosts({
 }) {
   const [editing, setEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
+  const [isDisabled, setIsDisabled] = useState(false);
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
   const navigate = useNavigate();
@@ -110,6 +111,29 @@ export default function ListPosts({
     );
   }
 
+  async function submmitPostEdit() {
+    setIsDisabled(true);
+    try {
+      const API_URL = process.env.REACT_APP_API_URL;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token || ''}`,
+        },
+      };
+
+      const body = { content: editedContent };
+
+      await axios.put(`${API_URL}/posts/${idPost}`, body, config);
+      setIsDisabled(false);
+      setEditing(false);
+      setUpdateListPosts(updateListPosts + 1);
+    } catch (error) {
+      alert('Erro ao editar o post!');
+      setIsDisabled(false);
+    }
+  }
+
   function renderContent() {
     if (conteudo && !editing) {
       return (
@@ -122,7 +146,24 @@ export default function ListPosts({
       );
     }
     if (editing) {
-      return <EditInput placeholder="test" type="text" autoFocus />;
+      return (
+        <EditInput
+          disabled={isDisabled}
+          placeholder="test"
+          type="text"
+          autoFocus
+          onChange={(e) => setEditedContent(e.target.value)}
+          onKeyUp={(e) => {
+            if (e.key === 'Escape') {
+              setEditing(false);
+              setEditedContent('');
+            }
+            if (e.key === 'Enter') {
+              submmitPostEdit();
+            }
+          }}
+        />
+      );
     }
     return null;
   }
@@ -188,7 +229,7 @@ export default function ListPosts({
                   color="white"
                   style={{ cursor: 'pointer', marginRight: '10px' }}
                   onClick={() => {
-                    setEditing(true);
+                    setEditing(!editing);
                   }}
                 />
                 <Trash
