@@ -137,6 +137,28 @@ const ProfileLink = styled.img`
   border-radius: 0px 12px 13px 0px;
 `;
 
+const EditInput = styled.input`
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  height: 46px;
+  width: 260%;
+  border: none;
+  padding-left: 12px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: black;
+
+  ::placeholder {
+    font-size: 14px;
+    color: #949494;
+  }
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+`;
+
 export {
   ContainerPost,
   Actions,
@@ -148,4 +170,5 @@ export {
   BoxContents,
   Box,
   ProfileLink,
+  EditInput,
 };

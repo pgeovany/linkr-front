@@ -9,8 +9,9 @@ import {
   Box,
   ProfileLink,
   Title,
+  EditInput,
 } from './Style.js';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline, Trash, Create } from 'react-ionicons';
 import axios from 'axios';
@@ -37,8 +38,8 @@ export default function ListPosts({
   likedBy,
   isLikedByCurrentUser,
 }) {
-  // const [editContent, setEditContent] = useState(false);
-  // const inputRef = useRef();
+  const [editing, setEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState('');
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
   const navigate = useNavigate();
@@ -109,6 +110,23 @@ export default function ListPosts({
     );
   }
 
+  function renderContent() {
+    if (conteudo && !editing) {
+      return (
+        <ReactTagify
+          tagStyle={tagStyle}
+          tagClicked={(tag) => navigate(`/hashtag/${tag.replace('#', '')}`)}
+        >
+          <p>{conteudo}</p>
+        </ReactTagify>
+      );
+    }
+    if (editing) {
+      return <EditInput placeholder="test" type="text" autoFocus />;
+    }
+    return null;
+  }
+
   async function likePost() {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
@@ -162,23 +180,16 @@ export default function ListPosts({
               >
                 {name}
               </h2>
-
-              {conteudo ? (
-                <ReactTagify
-                  tagStyle={tagStyle}
-                  tagClicked={(tag) =>
-                    navigate(`/hashtag/${tag.replace('#', '')}`)
-                  }
-                >
-                  <p>{conteudo}</p>
-                </ReactTagify>
-              ) : null}
+              {renderContent()}
             </Title>
             {postByUser ? (
               <div>
                 <Create
                   color="white"
                   style={{ cursor: 'pointer', marginRight: '10px' }}
+                  onClick={() => {
+                    setEditing(true);
+                  }}
                 />
                 <Trash
                   color="white"
