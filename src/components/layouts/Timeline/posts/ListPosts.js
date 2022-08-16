@@ -10,7 +10,7 @@ import {
   ProfileLink,
   Title,
 } from './Style.js';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline, Trash, Create } from 'react-ionicons';
 import axios from 'axios';
@@ -37,17 +37,38 @@ export default function ListPosts({
   likedBy,
   isLikedByCurrentUser,
 }) {
+
+  const [like, setLike] = useState(false);
+  const [sanitizedContent, setSanitizedContent] = useState('');
+  const [editContent, setEditContent] = useState(false);
+
+  // useEffect(() => {
+  //   if (islike === userId) {
+  //     setLike(true);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if(conteudo) {
+      const newSanitizedContent = conteudo.replace(/[^a-zA-Z0-9(_#)]/g, " ");
+      setSanitizedContent(newSanitizedContent);
+    }      
+  }, [conteudo])
+
+  // const userLikePost = postUser === islike;
+
   // const [editContent, setEditContent] = useState(false);
   // const inputRef = useRef();
+
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
   const navigate = useNavigate();
   const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
-  const tagStyle = {
-    color: '#b7b7b7',
-    fontWeight: 700,
-    cursor: 'pointer',
-  };
+  // const tagStyle = {
+  //   color: '#b7b7b7',
+  //   fontWeight: 700,
+  //   cursor: 'pointer',
+  // };
 
   useEffect(() => {
     ReactTooltip.rebuild();
@@ -136,6 +157,17 @@ export default function ListPosts({
     }
   }
 
+  const tagStyle = {
+    color: '#b7b7b7',
+    fontWeight: 700,
+    cursor: 'pointer',
+  };
+
+  function HandleTag(tag) {
+    const tagName = tag.replace(/[^a-zA-Z0-9(_)]/g, "");
+    navigate(`/hashtag/${tagName}`)
+  }
+
   return (
     <ContainerPost id={idPost}>
       <Actions>
@@ -163,14 +195,12 @@ export default function ListPosts({
                 {name}
               </h2>
 
-              {conteudo ? (
+              {sanitizedContent ? (
                 <ReactTagify
                   tagStyle={tagStyle}
-                  tagClicked={(tag) =>
-                    navigate(`/hashtag/${tag.replace('#', '')}`)
-                  }
+                  tagClicked={(tag) => HandleTag(tag)}
                 >
-                  <p>{conteudo}</p>
+                  <p>{sanitizedContent}</p>
                 </ReactTagify>
               ) : null}
             </Title>
