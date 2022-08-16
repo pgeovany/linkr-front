@@ -8,6 +8,7 @@ import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
 import { getLocal } from '../../../../utils/localStorageFunctions.js';
+import validateToken from '../../../../utils/validateToken';
 
 export default function TrendingPosts({ token, trendName, userId }) {
   const [allPosts, setAllPosts] = useState([]);
@@ -46,7 +47,8 @@ export default function TrendingPosts({ token, trendName, userId }) {
         setAllPosts(Posts);
         AtualizaUsuario();
       })
-      .catch((_) => {
+      .catch((error) => {
+        validateToken(error, navigate);
         setThereArePosts('warning');
       });
   }, [token, updateListPosts, trendName]); //eslint-disable-line

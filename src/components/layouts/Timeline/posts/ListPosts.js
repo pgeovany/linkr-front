@@ -9,6 +9,7 @@ import {
   Box,
   ProfileLink,
   Title,
+  EditInput,
 } from './Style.js';
 import { useContext, useEffect, useState } from 'react';
 import { Heart } from 'react-ionicons';
@@ -37,38 +38,30 @@ export default function ListPosts({
   likedBy,
   isLikedByCurrentUser,
 }) {
+  const navigate = useNavigate();
 
-  const [like, setLike] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState('');
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const [sanitizedContent, setSanitizedContent] = useState('');
-  const [editContent, setEditContent] = useState(false);
-
-  // useEffect(() => {
-  //   if (islike === userId) {
-  //     setLike(true);
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    if(conteudo) {
-      const newSanitizedContent = conteudo.replace(/[^a-zA-Z0-9(_#)]/g, " ");
-      setSanitizedContent(newSanitizedContent);
-    }      
-  }, [conteudo])
-
-  // const userLikePost = postUser === islike;
-
-  // const [editContent, setEditContent] = useState(false);
-  // const inputRef = useRef();
 
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
-  const navigate = useNavigate();
   const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
-  // const tagStyle = {
-  //   color: '#b7b7b7',
-  //   fontWeight: 700,
-  //   cursor: 'pointer',
-  // };
+
+  const tagStyle = {
+    color: '#b7b7b7',
+    fontWeight: 700,
+    cursor: 'pointer',
+  };
+
+  useEffect(() => {
+    if (conteudo) {
+      const newSanitizedContent = conteudo.replace(/[^a-zA-Z0-9(_#)]/g, ' ');
+      setSanitizedContent(newSanitizedContent);
+    }
+  }, [conteudo]);
 
   useEffect(() => {
     ReactTooltip.rebuild();
@@ -82,9 +75,7 @@ export default function ListPosts({
         return `Você curtiu esse post`;
       }
       if (peopleLiked === 2) {
-        return `Você e ${likedBy.find(
-          (user) => user.id !== userId
-        )} curtiram esse post`;
+        return `Você e ${likedBy[0]} curtiram esse post`;
       }
       if (peopleLiked >= 3) {
         return `Você, ${likedBy[0]} e outras ${
@@ -130,6 +121,65 @@ export default function ListPosts({
     );
   }
 
+  async function submmitPostEdit() {
+    setIsDisabled(true);
+    try {
+      const API_URL = process.env.REACT_APP_API_URL;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token || ''}`,
+        },
+      };
+
+      const body = { content: editedContent };
+
+      await axios.put(`${API_URL}/posts/${idPost}`, body, config);
+      setIsDisabled(false);
+      setEditing(false);
+      setUpdateListPosts(updateListPosts + 1);
+    } catch (error) {
+      alert('Erro ao editar o post!');
+      setIsDisabled(false);
+    }
+  }
+
+  function HandleTag(tag) {
+    const tagName = tag.replace(/[^a-zA-Z0-9(_)]/g, '');
+    navigate(`/hashtag/${tagName}`);
+  }
+
+  function renderContent() {
+    if (sanitizedContent && !editing) {
+      return (
+        <ReactTagify tagStyle={tagStyle} tagClicked={(tag) => HandleTag(tag)}>
+          <p>{sanitizedContent}</p>
+        </ReactTagify>
+      );
+    }
+    if (editing) {
+      return (
+        <EditInput
+          disabled={isDisabled}
+          placeholder="test"
+          type="text"
+          autoFocus
+          onChange={(e) => setEditedContent(e.target.value)}
+          onKeyUp={(e) => {
+            if (e.key === 'Escape') {
+              setEditing(false);
+              setEditedContent('');
+            }
+            if (e.key === 'Enter') {
+              submmitPostEdit();
+            }
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
   async function likePost() {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
@@ -155,17 +205,6 @@ export default function ListPosts({
         alert('Ocorreu um erro ao tentar dar um deslike no post');
       }
     }
-  }
-
-  const tagStyle = {
-    color: '#b7b7b7',
-    fontWeight: 700,
-    cursor: 'pointer',
-  };
-
-  function HandleTag(tag) {
-    const tagName = tag.replace(/[^a-zA-Z0-9(_)]/g, "");
-    navigate(`/hashtag/${tagName}`)
   }
 
   return (
@@ -194,21 +233,16 @@ export default function ListPosts({
               >
                 {name}
               </h2>
-
-              {sanitizedContent ? (
-                <ReactTagify
-                  tagStyle={tagStyle}
-                  tagClicked={(tag) => HandleTag(tag)}
-                >
-                  <p>{sanitizedContent}</p>
-                </ReactTagify>
-              ) : null}
+              {renderContent()}
             </Title>
             {postByUser ? (
               <div>
                 <Create
                   color="white"
                   style={{ cursor: 'pointer', marginRight: '10px' }}
+                  onClick={() => {
+                    setEditing(!editing);
+                  }}
                 />
                 <Trash
                   color="white"

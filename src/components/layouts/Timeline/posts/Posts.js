@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -6,8 +7,11 @@ import { Sad } from 'react-ionicons';
 import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
 import UserContext from '../../../../context/UserContext';
+import { deleteLocal } from '../../../../utils/localStorageFunctions';
+import validateToken from '../../../../utils/validateToken';
 
 export default function Posts({ token, idUser, userId }) {
+  const navigate = useNavigate();
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
   const { updateListPosts } = useContext(UserContext);
@@ -29,14 +33,14 @@ export default function Posts({ token, idUser, userId }) {
           return setThereArePosts('empty');
         }
         setThereArePosts('loaded');
+        console.log(Posts);
         setAllPosts(Posts);
       })
       .catch((err) => {
         setThereArePosts('warning');
+        validateToken(err, navigate);
       });
   }, [updateListPosts, userId]); // eslint-disable-line
-
-
 
   return (
     <>

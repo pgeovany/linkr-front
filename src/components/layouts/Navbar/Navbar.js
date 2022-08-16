@@ -6,6 +6,7 @@ import ProfilePicture from '../../shared/ProfilePicture';
 import { deleteLocal } from '../../../utils/localStorageFunctions';
 import { DebounceInput } from 'react-debounce-input';
 import { useState, useEffect } from 'react';
+import validateToken from '../../../utils/validateToken';
 
 export default function Navbar({
   token,
@@ -86,7 +87,7 @@ export default function Navbar({
         const { data } = await axios.get(`${API_URL}/users`, config);
         setUserList(data);
       } catch (error) {
-        console.log(error);
+        validateToken(error, navigate);
       }
     }
 
