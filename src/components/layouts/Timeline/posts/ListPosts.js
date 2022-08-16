@@ -10,7 +10,7 @@ import {
   ProfileLink,
   Title,
 } from './Style.js';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Heart } from 'react-ionicons';
 import { HeartOutline, Trash, Create } from 'react-ionicons';
 import axios from 'axios';
@@ -37,18 +37,21 @@ export default function ListPosts({
   likedBy,
   isLikedByCurrentUser,
 }) {
-  const [like, setLike] = useState(false);
   // const [editContent, setEditContent] = useState(false);
+  // const inputRef = useRef();
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
+  const navigate = useNavigate();
   const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
-  // const inputRef = useRef();
+  const tagStyle = {
+    color: '#b7b7b7',
+    fontWeight: 700,
+    cursor: 'pointer',
+  };
 
   useEffect(() => {
-    if (isLikedByCurrentUser) {
-      setLike(true);
-    }
-  }, []); //eslint-disable-line
+    ReactTooltip.rebuild();
+  });
 
   function verificaLikes() {
     if (peopleLiked === 0) {
@@ -82,6 +85,30 @@ export default function ListPosts({
     }
   }
 
+  function renderLikeButton() {
+    if (isLikedByCurrentUser) {
+      return (
+        <Heart
+          color="#AC0000"
+          width="70px"
+          height="30px"
+          style={{ cursor: 'pointer' }}
+          onClick={likePost}
+        />
+      );
+    }
+
+    return (
+      <HeartOutline
+        color="white"
+        width="70px"
+        height="30px"
+        style={{ cursor: 'pointer' }}
+        onClick={likePost}
+      />
+    );
+  }
+
   async function likePost() {
     const API_URL = process.env.REACT_APP_API_URL;
     const config = {
@@ -92,10 +119,9 @@ export default function ListPosts({
     const body = {
       idPost,
     };
-    if (like === false) {
+    if (!isLikedByCurrentUser) {
       try {
         await axios.post(`${API_URL}/likes`, body, config);
-        setLike(!like);
         setUpdateListPosts(updateListPosts + 1);
       } catch (error) {
         alert('Ocorreu um erro ao tentar dar um like no post');
@@ -103,7 +129,6 @@ export default function ListPosts({
     } else {
       try {
         await axios.delete(`${API_URL}/likes/${idPost}`, config);
-        setLike(!like);
         setUpdateListPosts(updateListPosts - 1);
       } catch (error) {
         alert('Ocorreu um erro ao tentar dar um deslike no post');
@@ -111,42 +136,11 @@ export default function ListPosts({
     }
   }
 
-  const navigate = useNavigate();
-  const tagStyle = {
-    color: '#b7b7b7',
-    fontWeight: 700,
-    cursor: 'pointer',
-  };
-
   return (
     <ContainerPost id={idPost}>
       <Actions>
         <PostProfilePicture src={picture} alt="profile" />
-        {isLikedByCurrentUser ? (
-          <Heart
-            color="#AC0000"
-            width="70px"
-            height="30px"
-            style={{ cursor: 'pointer' }}
-            onClick={() => likePost()}
-          />
-        ) : like ? (
-          <Heart
-            color="#AC0000"
-            width="70px"
-            height="30px"
-            style={{ cursor: 'pointer' }}
-            onClick={likePost}
-          />
-        ) : (
-          <HeartOutline
-            color="white"
-            width="70px"
-            height="30px"
-            style={{ cursor: 'pointer' }}
-            onClick={likePost}
-          />
-        )}
+        {renderLikeButton()}
         <span data-tip={verificaLikes()}>{likes} likes</span>
         <ReactTooltip
           place="bottom"
