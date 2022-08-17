@@ -15,12 +15,26 @@ export default function ListPostsAlert( {postsLength} ){
     const [lengthCounter, setLengthCounter] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { updateListPosts, token, idUser } = useContext(UserContext);
+    const { updateListPosts, setUpdateListPosts, token, idUser } = useContext(UserContext);
+
+    function update() {
+        console.log(`update ${updateListPosts}`);
+        setUpdateListPosts(updateListPosts + 1)
+        setLengthCounter(0)
+        console.log(`update ${updateListPosts}`);
+    }
 
     function RenderButton() {
         console.log('entrou no render button');
         return (
-            <NewPostsButton><p>{lengthCounter} new posts, load more!</p><HiRefresh /></ NewPostsButton>
+            <>
+            { 
+            lengthCounter !== 0 ? 
+            <NewPostsButton onClick={update}><p>{lengthCounter} new posts, load more!</p><HiRefresh /></ NewPostsButton> 
+            : <></>
+            }
+            
+            </>
         )
     }
 
@@ -47,7 +61,7 @@ export default function ListPostsAlert( {postsLength} ){
                 }
             } else {
                 //setLengthCounter(0);
-                //setIsLoading(false);
+                setIsLoading(false);
             }
         });
         promise.catch((err) => {
@@ -83,6 +97,7 @@ const NewPostsButton = styled.div`
     align-items: center;
     text-align: center;
     margin-top: 40px;
+    cursor: pointer;
     p{
         margin-right: 10px;
     }

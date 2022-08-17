@@ -19,6 +19,7 @@ export default function Posts({ token, idUser, userId }) {
   const [postsLength, setPostsLength] = useState(0);
 
   useEffect(() => {
+    console.log(`update ${updateListPosts}`);
     const API_URL = process.env.REACT_APP_API_URL;
     let config = {
       headers: {
