@@ -49,7 +49,7 @@ export default function Posts({ token, idUser, userId }) {
     async function fetchFollowCount() {
       try {
         const { data } = await axios.get(`${API_URL}/users/following`, config);
-        setFollowing(data.following);
+        setFollowing(Number(data.following));
       } catch (error) {}
     }
 
@@ -65,7 +65,8 @@ export default function Posts({ token, idUser, userId }) {
         </Empty>
       );
     }
-    if (following > 0 && friendsPosts.lenght === 0) {
+
+    if (following > 0 && friendsPosts?.length === 0) {
       return (
         <Empty>
           <Sad color="white" width="50px" height="40px" />
@@ -115,7 +116,7 @@ export default function Posts({ token, idUser, userId }) {
             page
           </h2>
         </WarningDiv>
-      ) : location === '/timeline' ? (
+      ) : location === '/timeline' && friendsPosts ? (
         renderUserTimeline()
       ) : (
         allPosts?.map((post, index) => (
