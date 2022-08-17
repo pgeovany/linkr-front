@@ -19,6 +19,7 @@ export default function UserPage() {
   const [renderUserList, setRenderUserList] = useState(false);
   const [loading, setLoading] = useState(false);
   const [follows, setFollows] = useState(userInfo.isFollower);
+  const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
 
   // useEffect(() => {
   //   if (!token) {
@@ -29,7 +30,8 @@ export default function UserPage() {
 
   useEffect(() => {
     setFollows(userInfo.isFollower);
-  }, [userInfo.isFollower]);
+    setUpdateListPosts(updateListPosts + 1);
+  }, [userInfo.isFollower, userInfo.id]); // eslint-disable-line
 
   async function handleFollowRequest() {
     setLoading(true);

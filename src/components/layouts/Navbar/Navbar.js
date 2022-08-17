@@ -51,10 +51,12 @@ export default function Navbar({
   }
 
   function genSearchMenu() {
+    const filteredList = userList.filter((user) => user.is_follower);
+    filteredList.push(...userList.filter((user) => !user.is_follower));
     if (renderUserList) {
       return (
         <DropdownSearchMenu>
-          {userList.map((user, index) => (
+          {filteredList.map((user, index) => (
             <SearchResult
               key={index}
               image={user.image}
@@ -92,7 +94,6 @@ export default function Navbar({
         //validateToken(error, navigate);
       }
     }
-    console.log('pesquisei');
     fetchData();
   }, [search, follows]); // eslint-disable-line
 
@@ -147,7 +148,14 @@ function SearchResult({ image, name, id, navigate, isFollower }) {
       }
     >
       <SmallProfilePicture src={image} alt="profile" />
-      <h1>{name}</h1>
+      {isFollower ? (
+        <>
+          <h1>{name}</h1>
+          <h2>• following</h2>
+        </>
+      ) : (
+        <h1>{name}</h1>
+      )}
     </SearchResultContainer>
   );
 }
@@ -302,12 +310,17 @@ const SearchResultContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  font-family: 'Lato';
+  font-size: 18px;
 
   h1 {
-    font-family: 'Lato';
-    font-size: 18px;
     color: #515151;
     padding-left: 12px;
+  }
+
+  h2 {
+    color: #c5c5c5;
+    padding-left: 10px;
   }
 
   &&:hover {
