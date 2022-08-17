@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Sad } from 'react-ionicons';
 import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
+import NewPostAlert from './NewPostAlert';
 import UserContext from '../../../../context/UserContext';
 import { deleteLocal } from '../../../../utils/localStorageFunctions';
 import validateToken from '../../../../utils/validateToken';
@@ -15,6 +16,7 @@ export default function Posts({ token, idUser, userId }) {
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
   const { updateListPosts } = useContext(UserContext);
+  const [postsLength, setPostsLength] = useState(0);
 
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -35,10 +37,11 @@ export default function Posts({ token, idUser, userId }) {
         setThereArePosts('loaded');
         console.log(Posts);
         setAllPosts(Posts);
+        setPostsLength(Posts.length);
       })
       .catch((err) => {
         setThereArePosts('warning');
-        validateToken(err, navigate);
+        //validateToken(err, navigate);
       });
   }, [updateListPosts, userId]); // eslint-disable-line
 
@@ -62,7 +65,9 @@ export default function Posts({ token, idUser, userId }) {
           </h2>
         </WarningDiv>
       ) : (
-        allPosts?.map((post, id) => (
+        <>
+        {allPosts ? <NewPostAlert postsLength={postsLength} setPostsLength={setPostsLength}/> : null}
+        {allPosts?.map((post, id) => (
           <ListPosts
             key={id}
             idPost={post.id}
@@ -80,8 +85,10 @@ export default function Posts({ token, idUser, userId }) {
             likes={post.likes}
             isLikedByCurrentUser={post.is_liked}
           />
-        ))
+        ))}
+        </>
       )}
+          
     </>
   );
 }

@@ -87,7 +87,7 @@ export default function Navbar({
         const { data } = await axios.get(`${API_URL}/users`, config);
         setUserList(data);
       } catch (error) {
-        validateToken(error, navigate);
+        //validateToken(error, navigate);
       }
     }
 
