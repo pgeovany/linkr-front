@@ -15,6 +15,7 @@ export default function Navbar({
   setActiveMenu,
   renderUserList,
   setRenderUserList,
+  follows,
 }) {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -59,6 +60,7 @@ export default function Navbar({
               image={user.image}
               name={user.name}
               id={user.id}
+              isFollower={user.is_follower}
               navigate={navigate}
             />
           ))}
@@ -87,12 +89,12 @@ export default function Navbar({
         const { data } = await axios.get(`${API_URL}/users`, config);
         setUserList(data);
       } catch (error) {
-        validateToken(error, navigate);
+        //validateToken(error, navigate);
       }
     }
-
+    console.log('pesquisei');
     fetchData();
-  }, [search]); // eslint-disable-line
+  }, [search, follows]); // eslint-disable-line
 
   return (
     <>
@@ -137,10 +139,12 @@ export default function Navbar({
   );
 }
 
-function SearchResult({ image, name, id, navigate }) {
+function SearchResult({ image, name, id, navigate, isFollower }) {
   return (
     <SearchResultContainer
-      onClick={() => navigate(`/user/${id}`, { state: { id, name, image } })}
+      onClick={() =>
+        navigate(`/user/${id}`, { state: { id, name, image, isFollower } })
+      }
     >
       <SmallProfilePicture src={image} alt="profile" />
       <h1>{name}</h1>

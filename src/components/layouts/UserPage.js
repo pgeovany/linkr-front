@@ -7,6 +7,7 @@ import UserContext from '../../context/UserContext';
 import Posts from './Timeline/posts/Posts';
 import HashtagsBox from './Timeline/HashtagsBox';
 import { deleteLocal } from '../../utils/localStorageFunctions';
+import axios from 'axios';
 
 export default function UserPage() {
   const navigate = useNavigate();
@@ -16,13 +17,67 @@ export default function UserPage() {
   const { userId } = useContext(UserContext);
   const [activeMenu, setActiveMenu] = useState(false);
   const [renderUserList, setRenderUserList] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [follows, setFollows] = useState(userInfo.isFollower);
+
+  // useEffect(() => {
+  //   if (!token) {
+  //     deleteLocal('linkrUserdata');
+  //     navigate('/');
+  //   }
+  // }, []); // eslint-disable-line
 
   useEffect(() => {
-    if (!token) {
-      deleteLocal('linkrUserdata');
-      navigate('/');
+    setFollows(userInfo.isFollower);
+  }, [userInfo.isFollower]);
+
+  async function handleFollowRequest() {
+    setLoading(true);
+
+    const API_URL = process.env.REACT_APP_API_URL;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token || ''} `,
+      },
+    };
+
+    try {
+      if (follows) {
+        await axios.post(
+          `${API_URL}/users/unfollow/${userInfo.id}`,
+          null,
+          config
+        );
+        setFollows(false);
+      } else {
+        await axios.post(
+          `${API_URL}/users/follow/${userInfo.id}`,
+          null,
+          config
+        );
+        setFollows(true);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      alert('Erro!');
     }
-  }, []); // eslint-disable-line
+  }
+
+  function renderFollowButton() {
+    if (userId === userInfo.id) {
+      return null;
+    }
+    return (
+      <FollowButton
+        follower={follows}
+        disabled={loading}
+        onClick={handleFollowRequest}
+      >
+        {follows ? 'Unfollow' : 'Follow'}
+      </FollowButton>
+    );
+  }
 
   return (
     <>
@@ -33,6 +88,7 @@ export default function UserPage() {
         setActiveMenu={setActiveMenu}
         renderUserList={renderUserList}
         setRenderUserList={setRenderUserList}
+        follows={follows}
       />
       <TimelineContainer
         onClick={() => {
@@ -52,10 +108,30 @@ export default function UserPage() {
           <Posts token={token} idUser={userInfo.id} userId={userId} />
         </Feed>
         <HashtagsBox />
+        {renderFollowButton()}
       </TimelineContainer>
     </>
   );
 }
+
+const FollowButton = styled.button`
+  width: 110px;
+  height: 30px;
+  font-family: 'Lato';
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 5px;
+  background-color: ${(props) => (props.follower ? 'white' : '#1877f2')};
+  color: ${(props) => (props.follower ? '#1877f2' : 'white')};
+  border: none;
+  position: relative;
+  top: 100px;
+  right: 150px;
+
+  &&:hover {
+    cursor: pointer;
+  }
+`;
 
 const TimelineContainer = styled.div`
   margin-top: 72px;

@@ -33,12 +33,11 @@ export default function Posts({ token, idUser, userId }) {
           return setThereArePosts('empty');
         }
         setThereArePosts('loaded');
-        console.log(Posts);
         setAllPosts(Posts);
       })
       .catch((err) => {
         setThereArePosts('warning');
-        validateToken(err, navigate);
+        //validateToken(err, navigate);
       });
   }, [updateListPosts, userId]); // eslint-disable-line
 
@@ -79,6 +78,7 @@ export default function Posts({ token, idUser, userId }) {
             likedBy={post.likedBy}
             likes={post.likes}
             isLikedByCurrentUser={post.is_liked}
+            isFollower={post.is_follower}
           />
         ))
       )}

@@ -48,7 +48,7 @@ export default function TrendingPosts({ token, trendName, userId }) {
         AtualizaUsuario();
       })
       .catch((error) => {
-        validateToken(error, navigate);
+        // validateToken(error, navigate);
         setThereArePosts('warning');
       });
   }, [token, updateListPosts, trendName]); //eslint-disable-line
