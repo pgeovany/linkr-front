@@ -17,6 +17,7 @@ export default function Posts({ token, idUser, userId }) {
   const [thereArePosts, setThereArePosts] = useState('loading');
   const [friendsPosts, setFiendsPosts] = useState([]);
   const { updateListPosts } = useContext(UserContext);
+  const [following, setFollowing] = useState(null);
 
   useEffect(() => {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -44,7 +45,56 @@ export default function Posts({ token, idUser, userId }) {
         setThereArePosts('warning');
         //validateToken(err, navigate);
       });
+
+    async function fetchFollowCount() {
+      try {
+        const { data } = await axios.get(`${API_URL}/users/following`, config);
+        setFollowing(data.following);
+      } catch (error) {}
+    }
+
+    fetchFollowCount();
   }, [updateListPosts, userId]); // eslint-disable-line
+
+  function renderUserTimeline() {
+    if (following === 0) {
+      return (
+        <Empty>
+          <Sad color="white" width="50px" height="40px" />
+          <h2>You don't follow anyone yet. Search for new friends!</h2>
+        </Empty>
+      );
+    }
+    if (following > 0 && friendsPosts.lenght === 0) {
+      return (
+        <Empty>
+          <Sad color="white" width="50px" height="40px" />
+          <h2>No posts found from your friends</h2>
+        </Empty>
+      );
+    }
+
+    return friendsPosts?.map((post, index) => (
+      <ListPosts
+        key={index}
+        idPost={post.id}
+        name={post.user.name}
+        postUser={post.user.id}
+        userId={userId}
+        conteudo={post.content}
+        picture={post.user.picture}
+        url={post.url}
+        urlTitle={post.urlTitle}
+        urlImage={post.urlImage}
+        urlDescription={post.urlDescription}
+        token={token}
+        likedBy={post.likedBy}
+        likes={post.likes}
+        isLikedByCurrentUser={post.is_liked}
+        isFollower={post.is_follower}
+      />
+    ));
+  }
 
   return (
     <>
@@ -66,26 +116,7 @@ export default function Posts({ token, idUser, userId }) {
           </h2>
         </WarningDiv>
       ) : location === '/timeline' ? (
-        friendsPosts?.map((post, index) => (
-          <ListPosts
-            key={index}
-            idPost={post.id}
-            name={post.user.name}
-            postUser={post.user.id}
-            userId={userId}
-            conteudo={post.content}
-            picture={post.user.picture}
-            url={post.url}
-            urlTitle={post.urlTitle}
-            urlImage={post.urlImage}
-            urlDescription={post.urlDescription}
-            token={token}
-            likedBy={post.likedBy}
-            likes={post.likes}
-            isLikedByCurrentUser={post.is_liked}
-            isFollower={post.is_follower}
-          />
-        ))
+        renderUserTimeline()
       ) : (
         allPosts?.map((post, index) => (
           <ListPosts

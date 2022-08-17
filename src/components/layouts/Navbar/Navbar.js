@@ -63,6 +63,7 @@ export default function Navbar({
               name={user.name}
               id={user.id}
               isFollower={user.is_follower}
+              handleMenusRendering={handleMenusRendering}
               navigate={navigate}
             />
           ))}
@@ -140,12 +141,20 @@ export default function Navbar({
   );
 }
 
-function SearchResult({ image, name, id, navigate, isFollower }) {
+function SearchResult({
+  image,
+  name,
+  id,
+  navigate,
+  isFollower,
+  handleMenusRendering,
+}) {
   return (
     <SearchResultContainer
-      onClick={() =>
-        navigate(`/user/${id}`, { state: { id, name, image, isFollower } })
-      }
+      onClick={() => {
+        navigate(`/user/${id}`, { state: { id, name, image, isFollower } });
+        handleMenusRendering();
+      }}
     >
       <SmallProfilePicture src={image} alt="profile" />
       {isFollower ? (

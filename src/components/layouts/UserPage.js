@@ -133,6 +133,10 @@ const FollowButton = styled.button`
   &&:hover {
     cursor: pointer;
   }
+
+  @media (max-width: 900px) {
+    top: 0;
+  }
 `;
 
 const TimelineContainer = styled.div`
