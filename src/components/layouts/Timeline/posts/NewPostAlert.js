@@ -9,9 +9,7 @@ import { HiRefresh } from 'react-icons/hi';
 import useInterval from 'use-interval';
 
 export default function ListPostsAlert({ postsLength }) {
-  console.log(postsLength);
   const counter = postsLength;
-  console.log(`counter ${counter}`);
   const [lengthCounter, setLengthCounter] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -19,14 +17,11 @@ export default function ListPostsAlert({ postsLength }) {
     useContext(UserContext);
 
   function update() {
-    console.log(`update ${updateListPosts}`);
     setUpdateListPosts(updateListPosts + 1);
     setLengthCounter(0);
-    console.log(`update ${updateListPosts}`);
   }
 
   function RenderButton() {
-    console.log('entrou no render button');
     return (
       <>
         {lengthCounter !== 0 ? (
@@ -60,10 +55,8 @@ export default function ListPostsAlert({ postsLength }) {
         const lengthDifference = filteredPosts.length - postsLength;
         if (lengthDifference > 0) {
           // 9 - 8 = 1
-          console.log(lengthDifference);
           setLengthCounter(lengthDifference);
           setIsLoading(true);
-          console.log(lengthDifference, isLoading, postsLength);
         }
       } else {
         //setLengthCounter(0);
@@ -71,7 +64,6 @@ export default function ListPostsAlert({ postsLength }) {
       }
     });
     promise.catch((err) => {
-      console.log(err);
       //validateToken(err, navigate);
     });
   }, 5000);
