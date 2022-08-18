@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Sad } from 'react-ionicons';
 import { Warning } from 'react-ionicons';
 import ListPosts from './ListPosts';
+import NewPostAlert from './NewPostAlert';
 import UserContext from '../../../../context/UserContext';
 import { deleteLocal } from '../../../../utils/localStorageFunctions';
 import validateToken from '../../../../utils/validateToken';
@@ -15,11 +16,13 @@ export default function Posts({ token, idUser, userId }) {
   const location = useLocation().pathname;
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
-  const [friendsPosts, setFiendsPosts] = useState([]);
+  const [friendsPosts, setFriendsPosts] = useState([]);
   const { updateListPosts } = useContext(UserContext);
   const [following, setFollowing] = useState(null);
+  const [postsLength, setPostsLength] = useState(0);
 
   useEffect(() => {
+    console.log(`update ${updateListPosts}`);
     const API_URL = process.env.REACT_APP_API_URL;
     let config = {
       headers: {
@@ -37,9 +40,13 @@ export default function Posts({ token, idUser, userId }) {
         }
         setThereArePosts('loaded');
         setAllPosts(Posts);
-        setFiendsPosts(
-          Posts.filter((post) => post.is_follower || post.user.id === userId)
+
+        const filteredPosts = Posts.filter(
+          (post) => post.is_follower || post.user.id === userId
         );
+        // alert(filteredPosts.length);
+        setFriendsPosts(filteredPosts);
+        setPostsLength(filteredPosts.length);
       })
       .catch((err) => {
         setThereArePosts('warning');
@@ -75,26 +82,36 @@ export default function Posts({ token, idUser, userId }) {
       );
     }
 
-    return friendsPosts?.map((post, index) => (
-      <ListPosts
-        key={index}
-        idPost={post.id}
-        name={post.user.name}
-        postUser={post.user.id}
-        userId={userId}
-        conteudo={post.content}
-        picture={post.user.picture}
-        url={post.url}
-        urlTitle={post.urlTitle}
-        urlImage={post.urlImage}
-        urlDescription={post.urlDescription}
-        token={token}
-        likedBy={post.likedBy}
-        likes={post.likes}
-        isLikedByCurrentUser={post.is_liked}
-        isFollower={post.is_follower}
-      />
-    ));
+    return (
+      <>
+        {friendsPosts ? (
+          <NewPostAlert
+            postsLength={postsLength}
+            setPostsLength={setPostsLength}
+          />
+        ) : null}
+        {friendsPosts?.map((post, index) => (
+          <ListPosts
+            key={index}
+            idPost={post.id}
+            name={post.user.name}
+            postUser={post.user.id}
+            userId={userId}
+            conteudo={post.content}
+            picture={post.user.picture}
+            url={post.url}
+            urlTitle={post.urlTitle}
+            urlImage={post.urlImage}
+            urlDescription={post.urlDescription}
+            token={token}
+            likedBy={post.likedBy}
+            likes={post.likes}
+            isLikedByCurrentUser={post.is_liked}
+            isFollower={post.is_follower}
+          />
+        ))}
+      </>
+    );
   }
 
   return (
@@ -119,26 +136,28 @@ export default function Posts({ token, idUser, userId }) {
       ) : location === '/timeline' && friendsPosts ? (
         renderUserTimeline()
       ) : (
-        allPosts?.map((post, index) => (
-          <ListPosts
-            key={index}
-            idPost={post.id}
-            name={post.user.name}
-            postUser={post.user.id}
-            userId={userId}
-            conteudo={post.content}
-            picture={post.user.picture}
-            url={post.url}
-            urlTitle={post.urlTitle}
-            urlImage={post.urlImage}
-            urlDescription={post.urlDescription}
-            token={token}
-            likedBy={post.likedBy}
-            likes={post.likes}
-            isLikedByCurrentUser={post.is_liked}
-            isFollower={post.is_follower}
-          />
-        ))
+        <>
+          {allPosts?.map((post, index) => (
+            <ListPosts
+              key={index}
+              idPost={post.id}
+              name={post.user.name}
+              postUser={post.user.id}
+              userId={userId}
+              conteudo={post.content}
+              picture={post.user.picture}
+              url={post.url}
+              urlTitle={post.urlTitle}
+              urlImage={post.urlImage}
+              urlDescription={post.urlDescription}
+              token={token}
+              likedBy={post.likedBy}
+              likes={post.likes}
+              isLikedByCurrentUser={post.is_liked}
+              isFollower={post.is_follower}
+            />
+          ))}
+        </>
       )}
     </>
   );
