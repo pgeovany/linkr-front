@@ -37,6 +37,7 @@ export default function ListPosts({
   likes,
   likedBy,
   isLikedByCurrentUser,
+  isFollower,
 }) {
   const navigate = useNavigate();
 
@@ -227,7 +228,7 @@ export default function ListPosts({
               <h2
                 onClick={() =>
                   navigate(`/user/${postUser}`, {
-                    state: { id: postUser, name, image: picture },
+                    state: { id: postUser, name, image: picture, isFollower },
                   })
                 }
               >

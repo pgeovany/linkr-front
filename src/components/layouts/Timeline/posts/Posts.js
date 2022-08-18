@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { TailSpin } from 'react-loader-spinner';
 import styled from 'styled-components';
@@ -13,13 +13,15 @@ import validateToken from '../../../../utils/validateToken';
 
 export default function Posts({ token, idUser, userId }) {
   const navigate = useNavigate();
+  const location = useLocation().pathname;
   const [allPosts, setAllPosts] = useState([]);
   const [thereArePosts, setThereArePosts] = useState('loading');
+  const [friendsPosts, setFriendsPosts] = useState([]);
   const { updateListPosts } = useContext(UserContext);
+  const [following, setFollowing] = useState(null);
   const [postsLength, setPostsLength] = useState(0);
 
   useEffect(() => {
-    console.log(`update ${updateListPosts}`);
     const API_URL = process.env.REACT_APP_API_URL;
     let config = {
       headers: {
@@ -36,15 +38,80 @@ export default function Posts({ token, idUser, userId }) {
           return setThereArePosts('empty');
         }
         setThereArePosts('loaded');
-        console.log(Posts);
         setAllPosts(Posts);
-        setPostsLength(Posts.length);
+
+        const filteredPosts = Posts.filter(
+          (post) => post.is_follower || post.user.id === userId
+        );
+        // alert(filteredPosts.length);
+        setFriendsPosts(filteredPosts);
+        setPostsLength(filteredPosts.length);
       })
       .catch((err) => {
         setThereArePosts('warning');
         //validateToken(err, navigate);
       });
+
+    async function fetchFollowCount() {
+      try {
+        const { data } = await axios.get(`${API_URL}/users/following`, config);
+        setFollowing(Number(data.following));
+      } catch (error) {}
+    }
+
+    fetchFollowCount();
   }, [updateListPosts, userId]); // eslint-disable-line
+
+  function renderUserTimeline() {
+    if (following === 0) {
+      return (
+        <Empty>
+          <Sad color="white" width="50px" height="40px" />
+          <h2>You don't follow anyone yet. Search for new friends!</h2>
+        </Empty>
+      );
+    }
+
+    if (following > 0 && friendsPosts?.length === 0) {
+      return (
+        <Empty>
+          <Sad color="white" width="50px" height="40px" />
+          <h2>No posts found from your friends</h2>
+        </Empty>
+      );
+    }
+
+    return (
+      <>
+        {friendsPosts ? (
+          <NewPostAlert
+            postsLength={postsLength}
+            setPostsLength={setPostsLength}
+          />
+        ) : null}
+        {friendsPosts?.map((post, index) => (
+          <ListPosts
+            key={index}
+            idPost={post.id}
+            name={post.user.name}
+            postUser={post.user.id}
+            userId={userId}
+            conteudo={post.content}
+            picture={post.user.picture}
+            url={post.url}
+            urlTitle={post.urlTitle}
+            urlImage={post.urlImage}
+            urlDescription={post.urlDescription}
+            token={token}
+            likedBy={post.likedBy}
+            likes={post.likes}
+            isLikedByCurrentUser={post.is_liked}
+            isFollower={post.is_follower}
+          />
+        ))}
+      </>
+    );
+  }
 
   return (
     <>
@@ -65,31 +132,32 @@ export default function Posts({ token, idUser, userId }) {
             page
           </h2>
         </WarningDiv>
+      ) : location === '/timeline' && friendsPosts ? (
+        renderUserTimeline()
       ) : (
         <>
-        {allPosts ? <NewPostAlert postsLength={postsLength} setPostsLength={setPostsLength}/> : null}
-        {allPosts?.map((post, id) => (
-          <ListPosts
-            key={id}
-            idPost={post.id}
-            name={post.user.name}
-            postUser={post.user.id}
-            userId={userId}
-            conteudo={post.content}
-            picture={post.user.picture}
-            url={post.url}
-            urlTitle={post.urlTitle}
-            urlImage={post.urlImage}
-            urlDescription={post.urlDescription}
-            token={token}
-            likedBy={post.likedBy}
-            likes={post.likes}
-            isLikedByCurrentUser={post.is_liked}
-          />
-        ))}
+          {allPosts?.map((post, index) => (
+            <ListPosts
+              key={index}
+              idPost={post.id}
+              name={post.user.name}
+              postUser={post.user.id}
+              userId={userId}
+              conteudo={post.content}
+              picture={post.user.picture}
+              url={post.url}
+              urlTitle={post.urlTitle}
+              urlImage={post.urlImage}
+              urlDescription={post.urlDescription}
+              token={token}
+              likedBy={post.likedBy}
+              likes={post.likes}
+              isLikedByCurrentUser={post.is_liked}
+              isFollower={post.is_follower}
+            />
+          ))}
         </>
       )}
-          
     </>
   );
 }

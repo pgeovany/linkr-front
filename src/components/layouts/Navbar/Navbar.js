@@ -15,6 +15,7 @@ export default function Navbar({
   setActiveMenu,
   renderUserList,
   setRenderUserList,
+  follows,
 }) {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -50,15 +51,19 @@ export default function Navbar({
   }
 
   function genSearchMenu() {
+    const filteredList = userList.filter((user) => user.is_follower);
+    filteredList.push(...userList.filter((user) => !user.is_follower));
     if (renderUserList) {
       return (
         <DropdownSearchMenu>
-          {userList.map((user, index) => (
+          {filteredList.map((user, index) => (
             <SearchResult
               key={index}
               image={user.image}
               name={user.name}
               id={user.id}
+              isFollower={user.is_follower}
+              handleMenusRendering={handleMenusRendering}
               navigate={navigate}
             />
           ))}
@@ -90,9 +95,8 @@ export default function Navbar({
         //validateToken(error, navigate);
       }
     }
-
     fetchData();
-  }, [search]); // eslint-disable-line
+  }, [search, follows]); // eslint-disable-line
 
   return (
     <>
@@ -137,13 +141,30 @@ export default function Navbar({
   );
 }
 
-function SearchResult({ image, name, id, navigate }) {
+function SearchResult({
+  image,
+  name,
+  id,
+  navigate,
+  isFollower,
+  handleMenusRendering,
+}) {
   return (
     <SearchResultContainer
-      onClick={() => navigate(`/user/${id}`, { state: { id, name, image } })}
+      onClick={() => {
+        navigate(`/user/${id}`, { state: { id, name, image, isFollower } });
+        handleMenusRendering();
+      }}
     >
       <SmallProfilePicture src={image} alt="profile" />
-      <h1>{name}</h1>
+      {isFollower ? (
+        <>
+          <h1>{name}</h1>
+          <h2>• following</h2>
+        </>
+      ) : (
+        <h1>{name}</h1>
+      )}
     </SearchResultContainer>
   );
 }
@@ -298,12 +319,17 @@ const SearchResultContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  font-family: 'Lato';
+  font-size: 18px;
 
   h1 {
-    font-family: 'Lato';
-    font-size: 18px;
     color: #515151;
     padding-left: 12px;
+  }
+
+  h2 {
+    color: #c5c5c5;
+    padding-left: 10px;
   }
 
   &&:hover {
