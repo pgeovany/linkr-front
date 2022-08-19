@@ -70,7 +70,7 @@ const TimelineContainer = styled.div`
 const Feed = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 80px;
+  margin-top: 40px;
   width: 48%;
   @media (max-width: 900px) {
     width: 100%;
@@ -83,7 +83,7 @@ const FeedTitle = styled.h1`
   font-size: 44px;
   font-weight: 700;
   color: white;
-  margin-bottom: 44px;
+  margin-bottom: 24px;
 
   @media (max-width: 900px) {
     margin-left: 20px;

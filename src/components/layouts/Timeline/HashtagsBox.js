@@ -78,7 +78,7 @@ const HashtagsBoxContainer = styled.div`
   height: 446px;
   border-radius: 16px;
   position: fixed;
-  top: 240px;
+  top: 180px;
   margin: 0px 20px 0 0;
   a {
     font-family: 'Oswald', sans-serif;
