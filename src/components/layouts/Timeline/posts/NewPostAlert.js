@@ -49,10 +49,12 @@ export default function ListPostsAlert({ postsLength }) {
       const Posts = res.data;
       const filteredPosts = Posts.filter((post) => {
         if (post.isRepost) {
-          return post.user_id === userId || post.follows_who_reposted;
+          return post.repostOwnerId === userId || post.follows_who_reposted;
         }
         return (
-          post.is_follower || post.user.id === userId || post.user_id === userId
+          post.is_follower ||
+          post.user.id === userId ||
+          post.repostOwnerId === userId
         );
       });
       if (postsLength !== filteredPosts.length) {

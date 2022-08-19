@@ -42,12 +42,12 @@ export default function Posts({ token, idUser, userId }) {
         console.log(Posts);
         const filteredPosts = Posts.filter((post) => {
           if (post.isRepost) {
-            return post.user_id === userId || post.follows_who_reposted;
+            return post.repostOwnerId === userId || post.follows_who_reposted;
           }
           return (
             post.is_follower ||
             post.user.id === userId ||
-            post.user_id === userId
+            post.repostOwnerId === userId
           );
         });
         // alert(filteredPosts.length);
@@ -116,8 +116,9 @@ export default function Posts({ token, idUser, userId }) {
             isFollower={post.is_follower}
             isRepost={post.isRepost}
             repostedBy={post.repostedBy}
-            repostOwnerId={post.user_id}
+            repostOwnerId={post.repostOwnerId}
             followsRepostOwner={post.follows_who_reposted}
+            repostInfo={post.repostInfo}
           />
         ))}
       </>
@@ -167,7 +168,10 @@ export default function Posts({ token, idUser, userId }) {
               isFollower={post.is_follower}
               isRepost={post.isRepost}
               repostedBy={post.repostedBy}
-              repostOwnerId={post.user_id}
+              repostOwnerId={post.repostOwnerId}
+              followsRepostOwner={post.follows_who_reposted}
+              repostInfo={post.repostInfo}
+              userPage={true}
             />
           ))}
         </>

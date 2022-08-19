@@ -45,6 +45,8 @@ export default function ListPosts({
   repostedBy,
   repostOwnerId,
   followsRepostOwner,
+  repostInfo,
+  userPage,
 }) {
   const navigate = useNavigate();
 
@@ -217,7 +219,8 @@ export default function ListPosts({
 
   return (
     <>
-      {isRepost && (followsRepostOwner || repostOwnerId === userId) ? (
+      {userPage && isRepost ? null : isRepost &&
+        (followsRepostOwner || repostOwnerId === userId) ? (
         <ContainerPost id={idPost}>
           <RepostHeader>
             <BiRepost
@@ -238,13 +241,13 @@ export default function ListPosts({
               style={{ cursor: 'pointer' }}
             />
 
-            <span data-tip={verificaLikes()}>{likes} likes</span>
+            <span data-tip={verificaLikes()}>{repostInfo.likes} likes</span>
             <BiRepost
               color="white"
               font-size={30}
               style={{ cursor: 'pointer' }}
             />
-            <span>1 re-post</span>
+            <span>{repostInfo.reposts} re-post</span>
             <ReactTooltip
               place="bottom"
               borderColor="rgba(255, 255, 255, 0.9)"
@@ -308,7 +311,7 @@ export default function ListPosts({
                 NewRepost(idPost, token, setUpdateListPosts, updateListPosts)
               }
             />
-            <span>1 re-post</span>
+            <span>{repostInfo?.reposts} re-post</span>
           </Actions>
           <ContainerContents>
             <UserTitle>
