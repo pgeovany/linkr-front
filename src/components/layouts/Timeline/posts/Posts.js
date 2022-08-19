@@ -39,7 +39,7 @@ export default function Posts({ token, idUser, userId }) {
         }
         setThereArePosts('loaded');
         setAllPosts(Posts);
-
+        console.log(Posts);
         const filteredPosts = Posts.filter(
           (post) => post.is_follower || post.user.id === userId
         );
@@ -107,6 +107,7 @@ export default function Posts({ token, idUser, userId }) {
             likes={post.likes}
             isLikedByCurrentUser={post.is_liked}
             isFollower={post.is_follower}
+            isRepost={post.isRepost}
           />
         ))}
       </>
