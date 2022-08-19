@@ -43,7 +43,8 @@ export default function ListPosts({
   isFollower,
   isRepost,
   repostedBy,
-  repostId,
+  repostOwnerId,
+  followsRepostOwner,
 }) {
   const navigate = useNavigate();
 
@@ -216,7 +217,7 @@ export default function ListPosts({
 
   return (
     <>
-      {isRepost ? (
+      {isRepost && (followsRepostOwner || repostOwnerId === userId) ? (
         <ContainerPost id={idPost}>
           <RepostHeader>
             <BiRepost
@@ -224,7 +225,9 @@ export default function ListPosts({
               font-size={24}
               style={{ cursor: 'pointer' }}
             />
-            <h1>Re-posted by {repostId === userId ? 'you' : repostedBy}</h1>
+            <h1>
+              Re-posted by {repostOwnerId === userId ? 'you' : repostedBy}
+            </h1>
           </RepostHeader>
           <Actions>
             <PostProfilePicture src={picture} alt="profile" />

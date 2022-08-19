@@ -40,9 +40,16 @@ export default function Posts({ token, idUser, userId }) {
         setThereArePosts('loaded');
         setAllPosts(Posts);
         console.log(Posts);
-        const filteredPosts = Posts.filter(
-          (post) => post.is_follower || post.user.id === userId
-        );
+        const filteredPosts = Posts.filter((post) => {
+          if (post.isRepost) {
+            return post.user_id === userId || post.follows_who_reposted;
+          }
+          return (
+            post.is_follower ||
+            post.user.id === userId ||
+            post.user_id === userId
+          );
+        });
         // alert(filteredPosts.length);
         setFriendsPosts(filteredPosts);
         setPostsLength(filteredPosts.length);
@@ -109,7 +116,8 @@ export default function Posts({ token, idUser, userId }) {
             isFollower={post.is_follower}
             isRepost={post.isRepost}
             repostedBy={post.repostedBy}
-            repostId={post.user_id}
+            repostOwnerId={post.user_id}
+            followsRepostOwner={post.follows_who_reposted}
           />
         ))}
       </>
@@ -157,6 +165,9 @@ export default function Posts({ token, idUser, userId }) {
               likes={post.likes}
               isLikedByCurrentUser={post.is_liked}
               isFollower={post.is_follower}
+              isRepost={post.isRepost}
+              repostedBy={post.repostedBy}
+              repostOwnerId={post.user_id}
             />
           ))}
         </>

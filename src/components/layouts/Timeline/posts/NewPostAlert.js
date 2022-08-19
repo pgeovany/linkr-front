@@ -47,9 +47,14 @@ export default function ListPostsAlert({ postsLength }) {
     const promise = axios.get(`${API_URL}/posts`, config);
     promise.then((res) => {
       const Posts = res.data;
-      const filteredPosts = Posts.filter(
-        (post) => post.is_follower || post.user.id === userId
-      );
+      const filteredPosts = Posts.filter((post) => {
+        if (post.isRepost) {
+          return post.user_id === userId || post.follows_who_reposted;
+        }
+        return (
+          post.is_follower || post.user.id === userId || post.user_id === userId
+        );
+      });
       if (postsLength !== filteredPosts.length) {
         // 8 !== 9
         const lengthDifference = filteredPosts.length - postsLength;
