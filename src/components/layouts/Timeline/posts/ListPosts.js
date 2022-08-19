@@ -42,6 +42,8 @@ export default function ListPosts({
   isLikedByCurrentUser,
   isFollower,
   isRepost,
+  repostedBy,
+  repostId,
 }) {
   const navigate = useNavigate();
 
@@ -222,7 +224,7 @@ export default function ListPosts({
               font-size={24}
               style={{ cursor: 'pointer' }}
             />
-            <h1>Re-posted by you</h1>
+            <h1>Re-posted by {repostId === userId ? 'you' : repostedBy}</h1>
           </RepostHeader>
           <Actions>
             <PostProfilePicture src={picture} alt="profile" />

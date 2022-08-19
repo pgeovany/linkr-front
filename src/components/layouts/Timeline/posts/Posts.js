@@ -63,7 +63,7 @@ export default function Posts({ token, idUser, userId }) {
   }, [updateListPosts, userId]); // eslint-disable-line
 
   function renderUserTimeline() {
-    if (following === 0) {
+    if (following === 0 && friendsPosts?.length === 0) {
       return (
         <Empty>
           <Sad color="white" width="50px" height="40px" />
@@ -108,6 +108,8 @@ export default function Posts({ token, idUser, userId }) {
             isLikedByCurrentUser={post.is_liked}
             isFollower={post.is_follower}
             isRepost={post.isRepost}
+            repostedBy={post.repostedBy}
+            repostId={post.user_id}
           />
         ))}
       </>
