@@ -21,6 +21,7 @@ import { ReactTagify } from 'react-tagify';
 import ReactTooltip from 'react-tooltip';
 import deletePost from './DeletePost.js';
 import UserContext from '../../../../context/UserContext.js';
+import CommentsBox from '../comments/CommentsBox.js';
 
 export default function ListPosts({
   idPost,
@@ -209,6 +210,7 @@ export default function ListPosts({
   }
 
   return (
+    <>
     <ContainerPost id={idPost}>
       <Actions>
         <PostProfilePicture src={picture} alt="profile" />
@@ -277,5 +279,7 @@ export default function ListPosts({
         </BoxContents>
       </ContainerContents>
     </ContainerPost>
+      <CommentsBox idPost={idPost} picture={picture}/>
+    </>
   );
 }

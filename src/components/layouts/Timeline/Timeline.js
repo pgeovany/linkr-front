@@ -55,11 +55,16 @@ export default function Timeline() {
 const TimelineContainer = styled.div`
   margin-top: 72px;
   width: 100%;
+  min-width: 1000px;
   background-color: #333333;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+  @media (max-width: 900px) {
+    width: 81.5%;
+    border-radius: 0px;
+}
 `;
 
 const Feed = styled.div`

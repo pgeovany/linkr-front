@@ -66,6 +66,7 @@ export default function NewPostForm({ image, token }) {
 }
 const NewPostContainer = styled.div`
   width: 100%;
+  min-width: 500px;
   height: 210px;
   padding: 18px 18px 18px 18px;
   background-color: white;
@@ -75,8 +76,9 @@ const NewPostContainer = styled.div`
   z-index: 0;
 
   @media (max-width: 900px) {
-    border-radius: 0px;
+    width: 81.5%;
     height: 190px;
+    border-radius: 0px;
   }
 `;
 

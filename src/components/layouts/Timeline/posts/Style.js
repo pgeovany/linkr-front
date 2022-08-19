@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import ProfilePicture from '../../../shared/ProfilePicture';
 const ContainerPost = styled.div`
   width: 100%;
+  min-width: 500px;
   min-height: 276px;
   padding: 18px 18px 18px 18px;
   background: #171717;
@@ -9,7 +10,9 @@ const ContainerPost = styled.div`
   border-radius: 16px;
   margin-top: 28px;
   display: flex;
+  z-index: 1;
   @media (max-width: 900px) {
+    width: 81.5%;
     border-radius: 0px;
     height: 276px;
   }
@@ -119,7 +122,7 @@ const Box = styled.div`
     color: white;
   }
   @media (max-width: 900px) {
-    max-width: 115px;
+    width: 100%;
     max-height: 115px;
     h2,
     p,

@@ -66,6 +66,7 @@ const HashtagsBoxArea = styled.aside`
     margin-bottom: 20px;
     border-bottom: 1px solid #484848;
   }
+
   @media (max-width: 900px) {
     display: none;
   }
@@ -88,5 +89,8 @@ const HashtagsBoxContainer = styled.div`
     line-height: 34px;
     cursor: pointer;
     text-decoration: none;
+  }
+  @media (max-width: 1200px) {
+    width: 250px;
   }
 `;
