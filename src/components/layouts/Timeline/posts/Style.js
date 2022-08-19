@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import ProfilePicture from '../../../shared/ProfilePicture';
+
 const ContainerPost = styled.div`
   width: 100%;
   min-width: 500px;
@@ -8,9 +9,11 @@ const ContainerPost = styled.div`
   background: #171717;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
-  margin-top: 28px;
+  margin-top: 60px;
   display: flex;
   z-index: 1;
+  position: relative;
+
   @media (max-width: 900px) {
     width: 81.5%;
     border-radius: 0px;
@@ -162,6 +165,30 @@ const EditInput = styled.input`
   }
 `;
 
+const RepostHeader = styled.div`
+  width: 100%;
+  height: 42px;
+  padding: 20px 18px 10px 18px;
+  background-color: #1e1e1e;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+
+  position: absolute;
+  top: -30px;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+
+  font-family: 'Lato';
+  font-size: 16px;
+  color: white;
+
+  @media (max-width: 900px) {
+    z-index: -1;
+  }
+`;
+
 export {
   ContainerPost,
   Actions,
@@ -174,4 +201,5 @@ export {
   Box,
   ProfileLink,
   EditInput,
+  RepostHeader,
 };

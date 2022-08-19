@@ -39,10 +39,17 @@ export default function Posts({ token, idUser, userId }) {
         }
         setThereArePosts('loaded');
         setAllPosts(Posts);
-
-        const filteredPosts = Posts.filter(
-          (post) => post.is_follower || post.user.id === userId
-        );
+        console.log(Posts);
+        const filteredPosts = Posts.filter((post) => {
+          if (post.isRepost) {
+            return post.repostOwnerId === userId || post.follows_who_reposted;
+          }
+          return (
+            post.is_follower ||
+            post.user.id === userId ||
+            post.repostOwnerId === userId
+          );
+        });
         // alert(filteredPosts.length);
         setFriendsPosts(filteredPosts);
         setPostsLength(filteredPosts.length);
@@ -63,7 +70,7 @@ export default function Posts({ token, idUser, userId }) {
   }, [updateListPosts, userId]); // eslint-disable-line
 
   function renderUserTimeline() {
-    if (following === 0) {
+    if (following === 0 && friendsPosts?.length === 0) {
       return (
         <Empty>
           <Sad color="white" width="50px" height="40px" />
@@ -107,6 +114,12 @@ export default function Posts({ token, idUser, userId }) {
             likes={post.likes}
             isLikedByCurrentUser={post.is_liked}
             isFollower={post.is_follower}
+            isRepost={post.isRepost}
+            repostedBy={post.repostedBy}
+            repostOwnerId={post.repostOwnerId}
+            followsRepostOwner={post.follows_who_reposted}
+            repostInfo={post.repostInfo}
+            commentsCounter={post.comments_counter}
           />
         ))}
       </>
@@ -154,6 +167,13 @@ export default function Posts({ token, idUser, userId }) {
               likes={post.likes}
               isLikedByCurrentUser={post.is_liked}
               isFollower={post.is_follower}
+              isRepost={post.isRepost}
+              repostedBy={post.repostedBy}
+              repostOwnerId={post.repostOwnerId}
+              followsRepostOwner={post.follows_who_reposted}
+              repostInfo={post.repostInfo}
+              userPage={true}
+              commentsCounter={post.comments_counter}
             />
           ))}
         </>
