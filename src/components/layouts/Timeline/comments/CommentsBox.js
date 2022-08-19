@@ -11,7 +11,7 @@ import CommentsForm from "./CommentsForm"
 
 export default function CommentsBox( { idPost } ) {
     const [comments, setComments] = useState([])
-    const { token, image } = useContext(UserContext);
+    const { token, image, updateListPosts, userId } = useContext(UserContext);
 
     useEffect(() => {
         const API_URL = process.env.REACT_APP_API_URL;
@@ -28,16 +28,16 @@ export default function CommentsBox( { idPost } ) {
         promise.catch((err) => {
             setComments([]);
         });
-    },[])
+    },[updateListPosts])
 
     return (
         <CommentsContainer>
             {
                 comments?.map((comment, index) => (
-                    <CommentComponent key={index} comment={comment} />
+                    <CommentComponent key={index} comment={comment} userId={userId}/>
                 ))
             }
-            <CommentsForm image={image}/>
+            <CommentsForm image={image} idPost={idPost}/>
         </CommentsContainer>
     )
     

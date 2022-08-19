@@ -1,20 +1,27 @@
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from "styled-components";
 
+export default function CommentComponent({ comment, userId }) {
+    const { userId: id, content, commentOwner, commentOwnerImage, isFollowing } = comment;
+    const navigate = useNavigate();
 
-export default function CommentComponent({ comment }) {
-    console.log(comment)
     return (
         <CommentContainer>  
-            <UserImage image={comment.commentOwnerImage}>
+            <UserImage image={commentOwnerImage}>
 
             </UserImage>
             <CommentBox>
                 <CommentHeader>
-                    <p>{comment.commentOwner}</p>
+                    <div onClick={() => navigate(`/user/${id}`, {
+                        state: {
+                            id, name: commentOwner, image: commentOwnerImage, isFollower: isFollowing,
+                        }
+                    })}>
+                        { isFollowing ? <p>{commentOwner}<span> • following</span></p> : id === userId ? <p>{commentOwner}<span> • post’s author</span></p> : <p>{commentOwner}</p> }
+                    </div>
                 </CommentHeader>
-                <span>{comment.content}</span>
+                <span>{content}</span>
             </CommentBox>
-
         </CommentContainer>
     )
     
@@ -58,6 +65,10 @@ const CommentHeader = styled.div`
         font-size: 14px;
         line-height: 17px;
         color: #F3F3F3;
+        cursor: pointer;
+    }
+    span {
+        color: #565656;
     }
 
 `
