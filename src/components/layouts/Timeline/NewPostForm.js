@@ -8,7 +8,7 @@ export default function NewPostForm({ image, token }) {
   const [url, setUrl] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-  const { updateListPosts, setUpdateListPosts } = useContext(UserContext);
+  const { updateListPosts, setUpdateListPosts, setUpdateComments } = useContext(UserContext);
 
   async function publishPost(e) {
     e.preventDefault();
@@ -28,6 +28,7 @@ export default function NewPostForm({ image, token }) {
       setUrl('');
       setContent('');
       setUpdateListPosts(updateListPosts + 1);
+      setUpdateComments(false)
       setLoading(false);
     } catch (error) {
       alert('Houve um erro ao publicar seu link!');

@@ -11,7 +11,8 @@ import CommentsForm from "./CommentsForm"
 
 export default function CommentsBox( { idPost } ) {
     const [comments, setComments] = useState([])
-    const { token, image, updateListPosts, userId } = useContext(UserContext);
+    const { token, image, updateListPosts, userId, setUpdateComments, updateComments } = useContext(UserContext);
+    console.log('atualizou comentários do post' + idPost)
 
     useEffect(() => {
         const API_URL = process.env.REACT_APP_API_URL;
@@ -23,19 +24,21 @@ export default function CommentsBox( { idPost } ) {
         const promise = axios.get(`${API_URL}/comments/${idPost}`, config);
         promise.then((res) => {
             setComments(res.data);
+            setUpdateComments(true)
             console.log(res.data)
         });
         promise.catch((err) => {
             setComments([]);
         });
-    },[updateListPosts])
+    },[updateComments])
 
     return (
         <CommentsContainer>
-            {
+            {   
+                updateComments ? 
                 comments?.map((comment, index) => (
                     <CommentComponent key={index} comment={comment} userId={userId}/>
-                ))
+                )) : null
             }
             <CommentsForm image={image} idPost={idPost}/>
         </CommentsContainer>
