@@ -57,11 +57,10 @@ export default function ListPostsAlert({ postsLength }) {
           post.repostOwnerId === userId
         );
       });
+
       if (postsLength !== filteredPosts.length) {
-        // 8 !== 9
         const lengthDifference = filteredPosts.length - postsLength;
         if (lengthDifference > 0) {
-          // 9 - 8 = 1
           setLengthCounter(lengthDifference);
           setIsLoading(true);
         }

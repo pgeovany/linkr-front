@@ -55,17 +55,22 @@ export default function Timeline() {
 const TimelineContainer = styled.div`
   margin-top: 72px;
   width: 100%;
+  min-width: 1000px;
   background-color: #333333;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+  @media (max-width: 900px) {
+    width: 81.5%;
+    border-radius: 0px;
+}
 `;
 
 const Feed = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 80px;
+  margin-top: 40px;
   width: 48%;
   @media (max-width: 900px) {
     width: 100%;
@@ -78,7 +83,7 @@ const FeedTitle = styled.h1`
   font-size: 44px;
   font-weight: 700;
   color: white;
-  margin-bottom: 44px;
+  margin-bottom: 24px;
 
   @media (max-width: 900px) {
     margin-left: 20px;

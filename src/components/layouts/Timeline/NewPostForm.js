@@ -8,7 +8,7 @@ export default function NewPostForm({ image, token }) {
   const [url, setUrl] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-  const { updateListPosts, setUpdateListPosts } = useContext(UserContext);
+  const { updateListPosts, setUpdateListPosts, setUpdateComments } = useContext(UserContext);
 
   async function publishPost(e) {
     e.preventDefault();
@@ -28,6 +28,7 @@ export default function NewPostForm({ image, token }) {
       setUrl('');
       setContent('');
       setUpdateListPosts(updateListPosts + 1);
+      setUpdateComments(false)
       setLoading(false);
     } catch (error) {
       alert('Houve um erro ao publicar seu link!');
@@ -66,6 +67,7 @@ export default function NewPostForm({ image, token }) {
 }
 const NewPostContainer = styled.div`
   width: 100%;
+  min-width: 500px;
   height: 210px;
   padding: 18px 18px 18px 18px;
   background-color: white;
@@ -75,8 +77,9 @@ const NewPostContainer = styled.div`
   z-index: 0;
 
   @media (max-width: 900px) {
-    border-radius: 0px;
+    width: 81.5%;
     height: 190px;
+    border-radius: 0px;
   }
 `;
 

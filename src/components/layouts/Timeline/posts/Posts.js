@@ -119,6 +119,7 @@ export default function Posts({ token, idUser, userId }) {
             repostOwnerId={post.repostOwnerId}
             followsRepostOwner={post.follows_who_reposted}
             repostInfo={post.repostInfo}
+            commentsCounter={post.comments_counter}
           />
         ))}
       </>
@@ -172,6 +173,7 @@ export default function Posts({ token, idUser, userId }) {
               followsRepostOwner={post.follows_who_reposted}
               repostInfo={post.repostInfo}
               userPage={true}
+              commentsCounter={post.comments_counter}
             />
           ))}
         </>

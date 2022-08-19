@@ -24,6 +24,8 @@ import ReactTooltip from 'react-tooltip';
 import deletePost from './DeletePost.js';
 import UserContext from '../../../../context/UserContext.js';
 import NewRepost from './NewRepost.js';
+import CommentsBox from '../comments/CommentsBox.js';
+import CommentButton from '../comments/CommentButton.js';
 
 export default function ListPosts({
   idPost,
@@ -47,18 +49,19 @@ export default function ListPosts({
   followsRepostOwner,
   repostInfo,
   userPage,
+  commentsCounter,
 }) {
   const navigate = useNavigate();
+  const { setUpdateListPosts, updateListPosts, updateComments } =
+    useContext(UserContext);
 
   const [editing, setEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-
   const [sanitizedContent, setSanitizedContent] = useState('');
-
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
-  const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
+  const [showComments, setShowComments] = useState(updateComments);
 
   const tagStyle = {
     color: '#b7b7b7',
@@ -147,6 +150,7 @@ export default function ListPosts({
       await axios.put(`${API_URL}/posts/${idPost}`, body, config);
       setIsDisabled(false);
       setEditing(false);
+      setShowComments(false);
       setUpdateListPosts(updateListPosts + 1);
     } catch (error) {
       alert('Erro ao editar o post!');
@@ -229,9 +233,10 @@ export default function ListPosts({
               style={{ cursor: 'pointer' }}
             />
             <h1>
-              Re-posted by {repostOwnerId === userId ? 'you' : repostedBy}
+              re-posted by {repostOwnerId === userId ? 'you' : repostedBy}
             </h1>
           </RepostHeader>
+
           <Actions>
             <PostProfilePicture src={picture} alt="profile" />
             <HeartOutline
@@ -242,6 +247,11 @@ export default function ListPosts({
             />
 
             <span data-tip={verificaLikes()}>{repostInfo.likes} likes</span>
+            <CommentButton
+              showComments={showComments}
+              setShowComments={setShowComments}
+              commentsCounter={commentsCounter}
+            />
             <BiRepost
               color="white"
               font-size={30}
@@ -292,88 +302,98 @@ export default function ListPosts({
           </ContainerContents>
         </ContainerPost>
       ) : (
-        <ContainerPost id={idPost}>
-          <Actions>
-            <PostProfilePicture src={picture} alt="profile" />
-            {renderLikeButton()}
-            <span data-tip={verificaLikes()}>{likes} likes</span>
-            <ReactTooltip
-              place="bottom"
-              borderColor="rgba(255, 255, 255, 0.9)"
-              backgroundColor="rgba(255, 255, 255, 0.9)"
-              textColor="#505050"
-            />
-            <BiRepost
-              color="white"
-              font-size={30}
-              style={{ cursor: 'pointer' }}
-              onClick={() =>
-                NewRepost(idPost, token, setUpdateListPosts, updateListPosts)
-              }
-            />
-            <span>{repostInfo?.reposts} re-post</span>
-          </Actions>
-          <ContainerContents>
-            <UserTitle>
-              <Header>
-                <Title>
-                  <h2
-                    onClick={() =>
-                      navigate(`/user/${postUser}`, {
-                        state: {
-                          id: postUser,
-                          name,
-                          image: picture,
-                          isFollower,
-                        },
-                      })
-                    }
-                  >
-                    {name}
-                  </h2>
-                  {renderContent()}
-                </Title>
-                {postByUser ? (
-                  <div>
-                    <Create
-                      color="white"
-                      style={{ cursor: 'pointer', marginRight: '10px' }}
-                      onClick={() => {
-                        setEditing(!editing);
-                      }}
-                    />
-                    <Trash
-                      color="white"
-                      style={{ cursor: 'pointer' }}
+        <>
+          <ContainerPost id={idPost}>
+            <Actions>
+              <PostProfilePicture src={picture} alt="profile" />
+              {renderLikeButton()}
+              <span data-tip={verificaLikes()}>{likes} likes</span>
+              <ReactTooltip
+                place="bottom"
+                borderColor="rgba(255, 255, 255, 0.9)"
+                backgroundColor="rgba(255, 255, 255, 0.9)"
+                textColor="#505050"
+              />
+              <CommentButton
+                showComments={showComments}
+                setShowComments={setShowComments}
+                commentsCounter={commentsCounter}
+              />
+              <BiRepost
+                color="white"
+                font-size={30}
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  NewRepost(idPost, token, setUpdateListPosts, updateListPosts)
+                }
+              />
+              <span>{repostInfo?.reposts} re-post</span>
+            </Actions>
+            <ContainerContents>
+              <UserTitle>
+                <Header>
+                  <Title>
+                    <h2
                       onClick={() =>
-                        deletePost(
-                          token,
-                          idPost,
-                          setUpdateListPosts,
-                          updateListPosts
-                        )
+                        navigate(`/user/${postUser}`, {
+                          state: {
+                            id: postUser,
+                            name,
+                            image: picture,
+                            isFollower,
+                          },
+                        })
                       }
-                    />
+                    >
+                      {name}
+                    </h2>
+                    {renderContent()}
+                  </Title>
+                  {postByUser ? (
+                    <div>
+                      <Create
+                        color="white"
+                        style={{ cursor: 'pointer', marginRight: '10px' }}
+                        onClick={() => {
+                          setEditing(!editing);
+                        }}
+                      />
+                      <Trash
+                        color="white"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() =>
+                          deletePost(
+                            token,
+                            idPost,
+                            setUpdateListPosts,
+                            updateListPosts
+                          )
+                        }
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                </Header>
+              </UserTitle>
+              <BoxContents>
+                <Box>
+                  <h2>{urlTitle}</h2>
+                  <div>
+                    <p>{urlDescription}</p>
                   </div>
-                ) : (
-                  ''
-                )}
-              </Header>
-            </UserTitle>
-            <BoxContents>
-              <Box>
-                <h2>{urlTitle}</h2>
-                <div>
-                  <p>{urlDescription}</p>
-                </div>
-                <a href={url} target="blank">
-                  {url}
-                </a>
-              </Box>
-              <ProfileLink src={urlImage} alt="ProfileLink" />
-            </BoxContents>
-          </ContainerContents>
-        </ContainerPost>
+                  <a href={url} target="blank">
+                    {url}
+                  </a>
+                </Box>
+                <ProfileLink src={urlImage} alt="ProfileLink" />
+              </BoxContents>
+            </ContainerContents>
+          </ContainerPost>
+          {showComments ? (
+            <CommentsBox idPost={idPost} userId2={userId} />
+          ) : null}
+        </>
       )}
     </>
   );
