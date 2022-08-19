@@ -6,7 +6,8 @@ export default function deletePost(
   token,
   idPost,
   setUpdateListPosts,
-  updateListPosts
+  updateListPosts,
+  setUpdateComments
 ) {
   Confirm.show(
     'Do you really confirm?',
@@ -23,6 +24,7 @@ export default function deletePost(
         };
         await axios.delete(`${API_URL}/posts/${idPost}`, config);
         setUpdateListPosts(updateListPosts + 1);
+        setUpdateComments(false);
       } catch (error) {
         Notify.failure('Não foi possível excluir o post');
       }

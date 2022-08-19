@@ -21,6 +21,8 @@ import { ReactTagify } from 'react-tagify';
 import ReactTooltip from 'react-tooltip';
 import deletePost from './DeletePost.js';
 import UserContext from '../../../../context/UserContext.js';
+import CommentsBox from '../comments/CommentsBox.js';
+import CommentButton from '../comments/CommentButton.js';
 
 export default function ListPosts({
   idPost,
@@ -38,18 +40,18 @@ export default function ListPosts({
   likedBy,
   isLikedByCurrentUser,
   isFollower,
+  activeComment,
 }) {
   const navigate = useNavigate();
+  const { setUpdateListPosts, updateListPosts, setUpdateComments, updateComments } = useContext(UserContext);
 
   const [editing, setEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-
   const [sanitizedContent, setSanitizedContent] = useState('');
-
   const peopleLiked = likedBy.length;
   const postByUser = postUser === userId;
-  const { setUpdateListPosts, updateListPosts } = useContext(UserContext);
+  const [showComments, setShowComments] = useState(updateComments);
 
   const tagStyle = {
     color: '#b7b7b7',
@@ -138,6 +140,7 @@ export default function ListPosts({
       await axios.put(`${API_URL}/posts/${idPost}`, body, config);
       setIsDisabled(false);
       setEditing(false);
+      setShowComments(false);
       setUpdateListPosts(updateListPosts + 1);
     } catch (error) {
       alert('Erro ao editar o post!');
@@ -209,6 +212,7 @@ export default function ListPosts({
   }
 
   return (
+    <>
     <ContainerPost id={idPost}>
       <Actions>
         <PostProfilePicture src={picture} alt="profile" />
@@ -220,6 +224,7 @@ export default function ListPosts({
           backgroundColor="rgba(255, 255, 255, 0.9)"
           textColor="#505050"
         />
+        <CommentButton showComments={showComments} setShowComments={setShowComments} />
       </Actions>
       <ContainerContents>
         <UserTitle>
@@ -253,7 +258,8 @@ export default function ListPosts({
                       token,
                       idPost,
                       setUpdateListPosts,
-                      updateListPosts
+                      updateListPosts,
+                      setUpdateComments
                     )
                   }
                 />
@@ -277,5 +283,9 @@ export default function ListPosts({
         </BoxContents>
       </ContainerContents>
     </ContainerPost>
+      {
+        showComments ? <CommentsBox idPost={idPost} userId2={userId}/> : null
+      }
+    </>
   );
 }

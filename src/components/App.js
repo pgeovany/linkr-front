@@ -13,6 +13,7 @@ export default function App() {
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
   const [updateListPosts, setUpdateListPosts] = useState(0);
+  const [updateComments, setUpdateComments] = useState(false);
 
   return (
     <BrowserRouter>
@@ -28,6 +29,8 @@ export default function App() {
           setUserId,
           setUpdateListPosts,
           updateListPosts,
+          setUpdateComments,
+          updateComments, 
         }}
       >
         <Routes>
